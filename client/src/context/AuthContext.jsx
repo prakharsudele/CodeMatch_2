@@ -1,28 +1,33 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const loginWithGithub = () => {
-    // MOCK USER (simulates GitHub OAuth success)
-    const mockUser = {
-      id: 1,
-      name: "Prakhar",
-      avatar: "https://i.pravatar.cc/150?img=12",
-      githubUsername: "prakharsudele",
-    };
+  // Load user from token on refresh
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      // For now, we just mark user as logged in
+      setUser({ loggedIn: true });
+    }
+    setLoading(false);
+  }, []);
 
-    setUser(mockUser);
+  const login = (token) => {
+    localStorage.setItem("token", token);
+    setUser({ loggedIn: true });
   };
 
   const logout = () => {
+    localStorage.removeItem("token");
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loginWithGithub, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,17 +1,18 @@
-import { useState } from 'react'
-import { Navbar } from './components/Navbar'
-import Landing from './pages/Landing'
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Landing from "./pages/Landing";
+import AuthSuccess from "./pages/AuthSuccess";
+import SwipePage from "./pages/SwipePage";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <Navbar></Navbar>
-      <Landing></Landing>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/auth/success" element={<AuthSuccess />} />
+        <Route path="/swipe" element={<SwipePage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
