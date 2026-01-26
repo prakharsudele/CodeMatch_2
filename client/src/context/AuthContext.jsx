@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
 
 const AuthContext = createContext();
 
@@ -6,36 +6,37 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Load user from token on refresh
-  useEffect(() => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    setLoading(false);
-    return;
-  }
+  const refetchUser = useCallback(async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setUser(null);
+      return;
+    }
 
-  fetch("http://localhost:5000/user/me", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then(res => res.json())
-    .then(data => {
-      setUser(data); // ✅ real user from backend
-    })
-    .catch(() => {
+    try {
+      const res = await fetch("http://localhost:5000/user/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("Unauthorized");
+
+      const data = await res.json();
+      setUser(data);
+    } catch {
       localStorage.removeItem("token");
       setUser(null);
-    })
-    .finally(() => setLoading(false));
-}, []);
+    }
+  }, []);
 
-
-
+  useEffect(() => {
+    refetchUser().finally(() => setLoading(false));
+  }, [refetchUser]);
 
   const login = (token) => {
     localStorage.setItem("token", token);
-    setUser({ loggedIn: true });
+    refetchUser(); // 🔥 THIS IS THE FIX
   };
 
   const logout = () => {
@@ -44,7 +45,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser , login, logout, loading }}>
+    <AuthContext.Provider
+      value={{ user, setUser, login, logout, loading, refetchUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
