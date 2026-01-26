@@ -14,26 +14,22 @@ export const AuthProvider = ({ children }) => {
     return;
   }
 
-  const fetchMe = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/user/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-      setUser(data); // 👈 FULL USER OBJECT (github + leetcode)
-    } catch (err) {
-      console.error("Failed to fetch user");
+  fetch("http://localhost:5000/user/me", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then(res => res.json())
+    .then(data => {
+      setUser(data); // ✅ real user from backend
+    })
+    .catch(() => {
+      localStorage.removeItem("token");
       setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchMe();
+    })
+    .finally(() => setLoading(false));
 }, []);
+
 
 
 
@@ -48,7 +44,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, setUser , login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

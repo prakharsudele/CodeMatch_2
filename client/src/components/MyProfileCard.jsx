@@ -1,39 +1,44 @@
 import { useAuth } from "../context/AuthContext";
 
 const MyProfileCard = () => {
-  const { user } = useAuth();
-
+  const { user, setUser } = useAuth();
   if (!user) return null;
 
   const github = user.github;
   const leetcode = user.leetcode;
 
   return (
-    <div className="relative w-80 rounded-2xl overflow-hidden bg-white text-zinc-900 shadow-xl">
+    <div className="relative w-80 rounded-2xl bg-zinc-900 text-white shadow-xl border border-zinc-800">
       
-      {/* Top gradient */}
-      <div className="h-28 bg-gradient-to-r from-purple-500 to-cyan-500 relative">
-        <img
-          src={user.avatar || "https://i.pravatar.cc/150"}
-          alt="avatar"
-          className="w-20 h-20 rounded-full border-4 border-white absolute left-1/2 -bottom-10 -translate-x-1/2 object-cover"
-        />
+      {/* TOP GRADIENT */}
+      <div className="relative h-28 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-t-2xl">
+        <label className="absolute left-1/2 -bottom-10 -translate-x-1/2 cursor-pointer group z-10">
+          <img
+            src={user.avatar || "https://i.pravatar.cc/150"}
+            alt="avatar"
+            className="w-20 h-20 rounded-full border-4 border-zinc-900 object-cover"
+          />
+
+          <div className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-xs font-semibold transition">
+            Change
+          </div>
+        </label>
       </div>
 
-      {/* Content */}
+      {/* CONTENT — OUTSIDE GRADIENT ✅ */}
       <div className="pt-14 px-6 pb-6 text-center">
         <h3 className="text-xl font-semibold">
           {user.username || "Developer"}
         </h3>
 
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-zinc-400">
           Software Developer
         </p>
 
         {/* GitHub */}
         {github ? (
           <div className="mt-4 text-sm">
-            <p className="font-medium text-zinc-700">
+            <p className="font-medium text-zinc-300">
               GitHub · @{user.username}
             </p>
 
@@ -49,15 +54,15 @@ const MyProfileCard = () => {
             </div>
           </div>
         ) : (
-          <p className="mt-4 text-sm text-zinc-400">
+          <p className="mt-4 text-sm text-zinc-500">
             GitHub not connected
           </p>
         )}
 
         {/* LeetCode */}
         {leetcode ? (
-          <div className="mt-4 text-sm border-t pt-4">
-            <p className="font-medium text-zinc-700">
+          <div className="mt-4 text-sm border-t border-zinc-700 pt-4">
+            <p className="font-medium text-zinc-300">
               LeetCode · @{leetcode.username}
             </p>
 
@@ -81,12 +86,12 @@ const MyProfileCard = () => {
             </div>
           </div>
         ) : (
-          <p className="mt-4 text-sm text-zinc-400">
+          <p className="mt-4 text-sm text-zinc-500">
             LeetCode not connected
           </p>
         )}
 
-        <button className="mt-6 w-full py-2 rounded-lg bg-zinc-900 text-white font-medium cursor-default">
+        <button className="mt-6 w-full py-2 rounded-lg bg-zinc-800 text-white font-medium cursor-default">
           Your Profile
         </button>
       </div>

@@ -44,12 +44,10 @@ const Home = () => {
         </section>
         
         {/* My Profile Preview */}
-<section className="space-y-6">
+<section className="space-y-6 mb-24">
   <div>
-    <h3 className="text-2xl font-bold">
-      Your profile preview
-    </h3>
-    <p className="text-zinc-400 text-sm mt-1">
+    <h3 className="text-2xl font-bold">Your profile preview</h3>
+    <p className="text-zinc-400 text-sm">
       This is how other developers see you on CodeMatch.
     </p>
   </div>
@@ -58,6 +56,7 @@ const Home = () => {
     <MyProfileCard />
   </div>
 </section>
+
 
 
         {/* Integrations */}
