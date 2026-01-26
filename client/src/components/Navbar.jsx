@@ -1,38 +1,45 @@
-import React, { useState } from "react";
-import AuthModal from './AuthModal'
+import { useState } from "react";
+import AuthModal from "./AuthModal";
+import { useAuth } from "../context/AuthContext";
 
 export const Navbar = () => {
-
+  const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
   return (
     <>
-    <nav className="sticky top-0 z-50 w-full border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-xl">
-      <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
-        
-        {/* Logo */}
-        <div className="relative text-2xl font-extrabold tracking-tight">
-          <span >
+      <nav className="sticky top-0 z-40 w-full border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-xl">
+        <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+          <div className="text-2xl font-extrabold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
             CodeMatch
-          </span>
-          {/* glow */}
-          <span className="absolute inset-0 bg-gradient-to-r from-purple-400 via-fuchsia-500 to-cyan-400 opacity-20 blur-xl -z-10"></span>
-        </div>
+          </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-4">
-          <button onClick={() => setOpen(true)} className="relative px-5 py-2 rounded-full text-zinc-300 hover:text-white transition font-medium group">
-            Login
-            <span className="absolute left-1/2 -bottom-1 h-[2px] w-0 bg-gradient-to-r from-purple-400 to-cyan-400 group-hover:w-1/2 transition-all -translate-x-1/2"></span>
-          </button>
-
-          <button onClick={() => setOpen(true)} className="px-6 py-2 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 transition font-semibold text-white shadow-lg shadow-purple-500/20">
-            Sign up
-          </button>
+          {!user ? (
+            <button
+              onClick={() => setOpen(true)}
+              className="px-6 py-2 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-semibold"
+            >
+              Sign up
+            </button>
+          ) : (
+            <div className="flex items-center gap-4">
+              <img
+                src={user.avatar}
+                alt="avatar"
+                className="w-9 h-9 rounded-full border border-zinc-700"
+              />
+              <button
+                onClick={logout}
+                className="text-sm text-zinc-400 hover:text-white"
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
-      </div>
-    </nav>
-    <AuthModal isOpen={open} onClose={() => setOpen(false)} />
+      </nav>
+
+      <AuthModal isOpen={open} onClose={() => setOpen(false)} />
     </>
   );
 };

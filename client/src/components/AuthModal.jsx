@@ -23,7 +23,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         </p>
 
         <div className="mt-8">
-          <GithubButton />
+          <GithubButton onClose={onClose} />
         </div>
 
         <p className="mt-6 text-xs text-zinc-500 text-center">
