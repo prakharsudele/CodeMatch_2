@@ -18,7 +18,7 @@ const AuthSuccess = () => {
 
     if (token) {
       login(token);
-      navigate("/swipe", { replace: true });
+      navigate("/home", { replace: true });
     } else {
       navigate("/", { replace: true });
     }
