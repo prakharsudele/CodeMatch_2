@@ -2,6 +2,8 @@ import Navbar from "../components/Navbar";
 import GithubCard from "../components/GithubCard";
 import LeetcodeCard from "../components/LeetcodeCard";
 import { useNavigate } from "react-router-dom";
+import MyProfileCard from "../components/MyProfileCard";
+
 
 const Home = () => {
   const navigate = useNavigate();
@@ -40,6 +42,23 @@ const Home = () => {
             Start Swiping →
           </button>
         </section>
+        
+        {/* My Profile Preview */}
+<section className="space-y-6">
+  <div>
+    <h3 className="text-2xl font-bold">
+      Your profile preview
+    </h3>
+    <p className="text-zinc-400 text-sm mt-1">
+      This is how other developers see you on CodeMatch.
+    </p>
+  </div>
+
+  <div className="flex justify-center md:justify-start">
+    <MyProfileCard />
+  </div>
+</section>
+
 
         {/* Integrations */}
         <section className="grid md:grid-cols-2 gap-6">

@@ -7,6 +7,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import "./config/passport.js";
 import userRoutes from "./routes/user.routes.js";
+import githubRoutes from "./routes/github.routes.js";
 
 connectDB();
 
@@ -32,6 +33,7 @@ app.use(passport.session());
 
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
+app.use("/github", githubRoutes);
 
 app.get("/", (req, res) => {
   res.send("CodeMatch API running");
