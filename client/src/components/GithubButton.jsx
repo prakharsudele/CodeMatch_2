@@ -1,11 +1,7 @@
-import { useAuth } from "../context/AuthContext";
-
-const GithubButton = ({ onClose }) => {
-  const { loginWithGithub } = useAuth();
-
+const GithubButton = () => {
   const handleLogin = () => {
-    loginWithGithub();
-    onClose();
+    // Redirect to backend GitHub OAuth
+    window.location.href = "http://localhost:5000/auth/github";
   };
 
   return (

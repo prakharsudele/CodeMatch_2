@@ -1,14 +1,13 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import session from "express-session";
 import passport from "passport";
 
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import "./config/passport.js";
+import userRoutes from "./routes/user.routes.js";
 
-dotenv.config();
 connectDB();
 
 const app = express();
@@ -32,6 +31,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
 
 app.get("/", (req, res) => {
   res.send("CodeMatch API running");

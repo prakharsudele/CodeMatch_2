@@ -4,12 +4,15 @@ import Footer from "../components/Footer";
 import AuthModal from "../components/AuthModal.jsx";
 import { useAuth } from "../context/AuthContext";
 import {useState} from 'react'
+import Navbar from '../components/Navbar.jsx'
 
 export default function Landing() {
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
   return (
+    <>
+    <Navbar></Navbar>
     <div className="min-h-screen bg-zinc-950">
       <section className="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-16 items-center">
         {/* LEFT */}
@@ -72,5 +75,7 @@ export default function Landing() {
       </section>
       <Footer></Footer>
     </div>
+    </>
+    
   );
 }

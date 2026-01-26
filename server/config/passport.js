@@ -1,6 +1,9 @@
 import passport from "passport";
 import GitHubStrategy from "passport-github2";
 import User from "../models/User.js";
+import dotenv from "dotenv"; // 1. Add this import
+
+dotenv.config();
 
 passport.use(
   new GitHubStrategy(
@@ -9,6 +12,7 @@ passport.use(
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
       callbackURL: "/auth/github/callback",
     },
+    
     async (accessToken, refreshToken, profile, done) => {
       try {
         let user = await User.findOne({ githubId: profile.id });

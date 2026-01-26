@@ -2,7 +2,7 @@ import { useState } from "react";
 import AuthModal from "./AuthModal";
 import { useAuth } from "../context/AuthContext";
 
-export const Navbar = () => {
+const Navbar = () => {
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
@@ -43,3 +43,5 @@ export const Navbar = () => {
     </>
   );
 };
+
+export default Navbar;
