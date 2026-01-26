@@ -8,13 +8,34 @@ export const AuthProvider = ({ children }) => {
 
   // Load user from token on refresh
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      // For now, we just mark user as logged in
-      setUser({ loggedIn: true });
-    }
+  const token = localStorage.getItem("token");
+  if (!token) {
     setLoading(false);
-  }, []);
+    return;
+  }
+
+  const fetchMe = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/user/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+      setUser(data); // 👈 FULL USER OBJECT (github + leetcode)
+    } catch (err) {
+      console.error("Failed to fetch user");
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchMe();
+}, []);
+
+
 
   const login = (token) => {
     localStorage.setItem("token", token);

@@ -1,9 +1,9 @@
 import express from "express";
 import authMiddleware from "../middleware/auth.middleware.js";
-import { getMe } from "../controllers/user.controller.js";
+import { connectLeetcode } from "../controllers/leetcode.controller.js";
 
 const router = express.Router();
 
-router.get("/me", authMiddleware, getMe);
+router.post("/connect", authMiddleware, connectLeetcode);
 
 export default router;

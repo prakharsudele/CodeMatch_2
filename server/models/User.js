@@ -14,8 +14,17 @@ const userSchema = new mongoose.Schema(
       commits: Number,
       lastSynced: Date,
     },
+    leetcode: {
+      username: String,
+      name: String, // 👈 display name
+      totalSolved: Number,
+      easy: Number,
+      medium: Number,
+      hard: Number,
+      lastSynced: Date,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("User", userSchema);

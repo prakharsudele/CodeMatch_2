@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 const GithubCard = () => {
+  const { user, setUser } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState(null);
-  const { user } = useAuth();
+
+  const github = user?.github;
 
   const connectGithub = async () => {
     setLoading(true);
+
     const res = await fetch("http://localhost:5000/github/sync", {
       method: "POST",
       headers: {
@@ -16,7 +18,10 @@ const GithubCard = () => {
     });
 
     const data = await res.json();
-    setStats(data);
+
+    // 👇 merge backend response into global user
+    setUser({ ...user, github: data });
+
     setLoading(false);
   };
 
@@ -24,7 +29,7 @@ const GithubCard = () => {
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
       <h3 className="text-xl font-semibold">GitHub</h3>
 
-      {!stats ? (
+      {!github ? (
         <>
           <p className="mt-3 text-zinc-400 text-sm">
             Sync your GitHub stats to improve your profile.
@@ -38,16 +43,26 @@ const GithubCard = () => {
           </button>
         </>
       ) : (
-        <div className="mt-6 grid grid-cols-2 gap-4 text-center">
-          <div>
-            <p className="text-2xl font-bold">{stats.publicRepos}</p>
-            <p className="text-sm text-zinc-400">Repos</p>
+        <>
+          <p className="mt-3 text-zinc-400 text-sm">
+            Connected as <span className="text-white">@{user.username}</span>
+          </p>
+
+          <div className="mt-6 grid grid-cols-3 gap-4 text-center">
+            <div>
+              <p className="text-xl font-bold">{github.publicRepos}</p>
+              <p className="text-sm text-zinc-400">Repos</p>
+            </div>
+            <div>
+              <p className="text-xl font-bold">{github.followers}</p>
+              <p className="text-sm text-zinc-400">Followers</p>
+            </div>
+            <div>
+              <p className="text-xl font-bold">{github.following}</p>
+              <p className="text-sm text-zinc-400">Following</p>
+            </div>
           </div>
-          <div>
-            <p className="text-2xl font-bold">{stats.commits}</p>
-            <p className="text-sm text-zinc-400">Commits</p>
-          </div>
-        </div>
+        </>
       )}
     </div>
   );
