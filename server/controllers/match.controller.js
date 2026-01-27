@@ -48,3 +48,10 @@ export const respondToMatchRequest = async (req, res) => {
 
   res.json({ status: action });
 };
+
+export const getMatches = async (req, res) => {
+  const user = await User.findById(req.userId)
+    .populate("matches", "username avatar github leetcode linkedin");
+
+  res.json(user.matches);
+};

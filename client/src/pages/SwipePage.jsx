@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import SwipeStack from "../components/SwipeStack";
 import MatchRequestCard from "../components/MatchRequestCard";
 import Navbar from "../components/Navbar.jsx";
+import MatchModal from "../components/MatchModal";
 
 const Swipe = () => {
   const { user, loading } = useAuth();
@@ -12,6 +13,7 @@ const Swipe = () => {
 
   const [users, setUsers] = useState([]);
   const [matchRequests, setMatchRequests] = useState([]);
+  const [matchedUser, setMatchedUser] = useState(null);
 
   /* Fetch swipe feed */
   useEffect(() => {
@@ -36,10 +38,10 @@ const Swipe = () => {
   }, []);
 
   /* Remove request from UI after accept/reject */
-  const handleRespond = (fromUserId) => {
-    setMatchRequests((prev) =>
-      prev.filter((r) => r.from._id !== fromUserId)
-    );
+  const handleRespond = (fromUser) => {
+    setMatchedUser(fromUser);
+
+    setMatchRequests((prev) => prev.filter((r) => r.from._id !== fromUser._id));
   };
 
   const handleSwipe = async (direction, userId) => {
@@ -69,7 +71,6 @@ const Swipe = () => {
 
       <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-6">
         <div className="flex w-full max-w-6xl items-start gap-10">
-
           {/* Swipe Cards */}
           <div className="flex-1 flex justify-center">
             <SwipeStack users={users} onSwipe={handleSwipe} />
@@ -107,9 +108,11 @@ const Swipe = () => {
               )}
             </div>
           </div>
-
         </div>
       </div>
+      {matchedUser && (
+        <MatchModal user={matchedUser} onClose={() => setMatchedUser(null)} />
+      )}
     </>
   );
 };

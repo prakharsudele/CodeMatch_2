@@ -13,7 +13,7 @@ const MatchRequestCard = ({ user, onRespond }) => {
     });
 
     // 🔥 tell parent to remove this request
-    onRespond(user._id);
+    onRespond(user);
   };
 
   return (

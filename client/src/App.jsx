@@ -4,6 +4,7 @@ import AuthSuccess from "./pages/AuthSuccess";
 import SwipePage from "./pages/SwipePage";
 import RequireAuth from "./components/RequireAuth";
 import Home from "./pages/Home";
+import Matches from "./pages/Matches";
 
 function App() {
   return (
@@ -27,6 +28,15 @@ function App() {
           element={
             <RequireAuth>
               <SwipePage />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/matches"
+          element={
+            <RequireAuth>
+              <Matches />
             </RequireAuth>
           }
         />
