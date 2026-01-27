@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema(
       hard: Number,
       lastSynced: Date,
     },
+    
   },
   { timestamps: true },
 );
