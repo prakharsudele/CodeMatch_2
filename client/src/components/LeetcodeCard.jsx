@@ -8,7 +8,6 @@ const LeetcodeCard = () => {
 
   const connectLeetcode = async () => {
     if (!username) return;
-
     setLoading(true);
 
     try {
@@ -21,7 +20,6 @@ const LeetcodeCard = () => {
         body: JSON.stringify({ username }),
       });
 
-      // 🔥 THIS updates everything
       await refetchUser();
       setUsername("");
     } catch (err) {
@@ -32,24 +30,74 @@ const LeetcodeCard = () => {
   };
 
   return (
-    <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-      <h3 className="text-xl font-semibold">LeetCode</h3>
+    <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 space-y-4">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h3 className="text-xl font-semibold">LeetCode</h3>
+        <span className="text-xs px-2 py-1 rounded-full bg-orange-500/20 text-orange-400">
+          DSA
+        </span>
+      </div>
 
       {user?.leetcode ? (
-        <div className="mt-4 text-sm">
-          <p className="text-zinc-400">@{user.leetcode.username}</p>
-          <p>Solved: {user.leetcode.totalSolved}</p>
+        <>
+          {/* Identity */}
+          <div>
+            <p className="text-sm text-zinc-400">@{user.leetcode.username}</p>
+            {user.leetcode.name && (
+              <p className="text-zinc-200 font-medium">
+                {user.leetcode.name}
+              </p>
+            )}
+          </div>
 
-          <button
-            onClick={connectLeetcode}
-            disabled={loading}
-            className="mt-4 px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700"
-          >
-            {loading ? "Syncing..." : "Sync LeetCode"}
-          </button>
-        </div>
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div className="rounded-lg bg-zinc-800 p-3">
+              <p className="text-lg font-bold text-green-400">
+                {user.leetcode.easy}
+              </p>
+              <p className="text-xs text-zinc-500">Easy</p>
+            </div>
+            <div className="rounded-lg bg-zinc-800 p-3">
+              <p className="text-lg font-bold text-yellow-400">
+                {user.leetcode.medium}
+              </p>
+              <p className="text-xs text-zinc-500">Medium</p>
+            </div>
+            <div className="rounded-lg bg-zinc-800 p-3">
+              <p className="text-lg font-bold text-red-400">
+                {user.leetcode.hard}
+              </p>
+              <p className="text-xs text-zinc-500">Hard</p>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-between pt-2">
+            <p className="text-sm text-zinc-400">
+              Total solved:{" "}
+              <span className="text-white font-semibold">
+                {user.leetcode.totalSolved}
+              </span>
+            </p>
+
+            <button
+              onClick={connectLeetcode}
+              disabled={loading}
+              className="px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-sm"
+            >
+              {loading ? "Syncing..." : "Sync"}
+            </button>
+          </div>
+        </>
       ) : (
-        <div className="mt-4 space-y-3">
+        <>
+          {/* Empty state */}
+          <p className="text-sm text-zinc-400">
+            Connect your LeetCode to showcase your DSA strength on your profile.
+          </p>
+
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -60,11 +108,11 @@ const LeetcodeCard = () => {
           <button
             onClick={connectLeetcode}
             disabled={loading}
-            className="w-full px-4 py-2 rounded-lg bg-orange-600 hover:bg-orange-500"
+            className="w-full px-4 py-2 rounded-lg bg-orange-600 hover:bg-orange-500 font-medium"
           >
             {loading ? "Connecting..." : "Connect LeetCode"}
           </button>
-        </div>
+        </>
       )}
     </div>
   );
