@@ -4,6 +4,9 @@ import { getMe } from "../controllers/user.controller.js";
 
 const router = express.Router();
 
-router.get("/me", authMiddleware, getMe);
+router.get("/me", authMiddleware, (req, res) => {
+  res.json(req.user);
+});
+
 
 export default router;
