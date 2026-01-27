@@ -9,7 +9,7 @@ import Matches from "./pages/Matches";
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
+      <Routes className="min-h-screen bg-zinc-900 text-white">
         <Route path="/" element={<Landing />} />
         <Route path="/auth/success" element={<AuthSuccess />} />
 
