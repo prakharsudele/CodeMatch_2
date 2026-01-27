@@ -9,31 +9,35 @@ export const AuthProvider = ({ children }) => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const fetchMe = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setUser(null);
-      setLoading(false);
-      return;
-    }
+  const token = localStorage.getItem("token");
+  if (!token) {
+    setUser(null);
+    setLoading(false);
+    return;
+  }
 
-    try {
-      const res = await fetch(`${BACKEND_URL}/user/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  // 🔥 This removes any extra slashes at the end of your BACKEND_URL
+  const baseUrl = BACKEND_URL.replace(/\/+$/, ""); 
 
-      if (!res.ok) throw new Error("Unauthorized");
+  try {
+    const res = await fetch(`${baseUrl}/user/me`, { // Now it will be .app/user/me
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-      const data = await res.json();
-      setUser(data);
-    } catch {
-      localStorage.removeItem("token");
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
+    if (!res.ok) throw new Error("Unauthorized");
+
+    const data = await res.json();
+    setUser(data);
+  } catch (err) {
+    console.error("Fetch error:", err);
+    localStorage.removeItem("token");
+    setUser(null);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchMe();
