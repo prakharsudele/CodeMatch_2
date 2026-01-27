@@ -23,7 +23,11 @@ const userSchema = new mongoose.Schema(
       hard: Number,
       lastSynced: Date,
     },
-    
+    swipes: {
+      liked: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+      passed: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    },
+    matches: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true },
 );

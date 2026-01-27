@@ -9,6 +9,7 @@ import "./config/passport.js";
 import userRoutes from "./routes/user.routes.js";
 import githubRoutes from "./routes/github.routes.js";
 import leetcodeRoutes from "./routes/leetcode.routes.js";
+import swipeRoutes from "./routes/swipe.routes.js";
 
 connectDB();
 
@@ -36,6 +37,7 @@ app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/github", githubRoutes);
 app.use("/leetcode", leetcodeRoutes);
+app.use("/swipe", swipeRoutes);
 
 app.get("/", (req, res) => {
   res.send("CodeMatch API running");
