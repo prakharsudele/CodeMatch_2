@@ -5,12 +5,17 @@ import dotenv from "dotenv"; // 1. Add this import
 
 dotenv.config();
 
+const callbackURL =
+  process.env.NODE_ENV === "production"
+    ? "https://code-match-backend.vercel.app/auth/github/callback"
+    : "http://localhost:5000/auth/github/callback";
+
 passport.use(
   new GitHubStrategy(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: "/auth/github/callback",
+      callbackURL,
     },
     
     async (accessToken, refreshToken, profile, done) => {
