@@ -27,6 +27,18 @@ const userSchema = new mongoose.Schema(
       liked: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
       passed: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     },
+
+    matchRequests: [
+      {
+        from: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        status: {
+          type: String,
+          enum: ["pending", "accepted", "rejected"],
+          default: "pending",
+        },
+      },
+    ],
+
     matches: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true },

@@ -58,7 +58,37 @@ export const swipeAction = async (req, res) => {
     }
 
     // LIKE LOGIC
+    if (action === "like") {
+  // prevent duplicate likes
+  if (!user.swipes.liked.includes(targetUserId)) {
     user.swipes.liked.push(targetUserId);
+  }
+
+  const isMutual = targetUser.swipes.liked.includes(req.userId);
+
+  if (isMutual) {
+    // create match request ONLY if not already exists
+    const alreadyRequested = targetUser.matchRequests.some(
+      (r) => r.from.toString() === req.userId
+    );
+
+    if (!alreadyRequested) {
+      targetUser.matchRequests.push({
+        from: req.userId,
+        status: "pending",
+      });
+    }
+
+    await targetUser.save();
+    await user.save();
+
+    return res.json({ status: "match-request-created" });
+  }
+
+  await user.save();
+  return res.json({ status: "liked" });
+}
+
 
     // Check mutual like
     const isMatch = targetUser.swipes.liked.includes(req.userId);
