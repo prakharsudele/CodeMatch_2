@@ -1,7 +1,9 @@
+
 const GithubButton = () => {
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const handleLogin = () => {
     // Redirect to backend GitHub OAuth
-    window.location.href = "http://localhost:5000/auth/github";
+    window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/github`;
   };
 
   return (

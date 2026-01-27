@@ -2,13 +2,14 @@ import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 
 const GithubCard = () => {
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const { user, refetchUser } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const connectGithub = async () => {
     setLoading(true);
     try {
-      await fetch("http://localhost:5000/github/sync", {
+      await fetch(`${import.meta.env.VITE_BACKEND_URL}/github/sync`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

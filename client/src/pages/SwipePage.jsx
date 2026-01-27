@@ -8,6 +8,8 @@ import Navbar from "../components/Navbar.jsx";
 import MatchModal from "../components/MatchModal";
 
 const Swipe = () => {
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
   const { user, loading } = useAuth();
   const { percent } = getProfileCompleteness(user);
 
@@ -17,7 +19,7 @@ const Swipe = () => {
 
   /* Fetch swipe feed */
   useEffect(() => {
-    fetch("http://localhost:5000/swipe/feed", {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/swipe/feed`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -28,7 +30,7 @@ const Swipe = () => {
 
   /* Fetch match requests */
   useEffect(() => {
-    fetch("http://localhost:5000/matches/requests", {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/matches/requests`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -45,7 +47,7 @@ const Swipe = () => {
   };
 
   const handleSwipe = async (direction, userId) => {
-    await fetch("http://localhost:5000/swipe", {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/swipe`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

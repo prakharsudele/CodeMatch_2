@@ -4,11 +4,13 @@ import { useAuth } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
 
 const Matches = () => {
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
   const { user, loading } = useAuth();
   const [matches, setMatches] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/matches", {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/matches`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

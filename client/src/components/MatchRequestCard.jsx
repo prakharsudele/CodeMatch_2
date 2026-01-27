@@ -1,6 +1,8 @@
 const MatchRequestCard = ({ user, onRespond }) => {
   const respond = async (action) => {
-    await fetch("http://localhost:5000/matches/respond", {
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+    await fetch(`${import.meta.env.VITE_BACKEND_URL}/matches/respond`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

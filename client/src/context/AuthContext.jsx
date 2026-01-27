@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
@@ -6,15 +6,18 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const refetchUser = useCallback(async () => {
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+  const fetchMe = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
       setUser(null);
+      setLoading(false);
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:5000/user/me", {
+      const res = await fetch(`${BACKEND_URL}/user/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -27,16 +30,18 @@ export const AuthProvider = ({ children }) => {
     } catch {
       localStorage.removeItem("token");
       setUser(null);
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
-    refetchUser().finally(() => setLoading(false));
-  }, [refetchUser]);
+    fetchMe();
+  }, []);
 
   const login = (token) => {
     localStorage.setItem("token", token);
-    refetchUser(); // 🔥 THIS IS THE FIX
+    fetchMe(); // 🔥 critical
   };
 
   const logout = () => {
@@ -46,7 +51,13 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, setUser, login, logout, loading, refetchUser }}
+      value={{
+        user,
+        loading,
+        login,
+        logout,
+        refetchUser: fetchMe,
+      }}
     >
       {children}
     </AuthContext.Provider>

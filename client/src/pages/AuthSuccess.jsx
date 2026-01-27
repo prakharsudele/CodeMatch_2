@@ -10,13 +10,21 @@ const AuthSuccess = () => {
   useEffect(() => {
     const token = params.get("token");
 
+    console.log("TOKEN FROM URL:", token); // 🔍 debug
+
     if (token) {
       login(token);
       navigate("/home", { replace: true });
+    } else {
+      navigate("/", { replace: true });
     }
   }, []);
 
-  return <p>Signing you in...</p>;
+  return (
+    <div className="min-h-screen flex items-center justify-center text-zinc-400">
+      Signing you in…
+    </div>
+  );
 };
 
 export default AuthSuccess;

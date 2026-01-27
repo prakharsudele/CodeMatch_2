@@ -7,11 +7,13 @@ const LeetcodeCard = () => {
   const [loading, setLoading] = useState(false);
 
   const connectLeetcode = async () => {
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
     if (!username) return;
     setLoading(true);
 
     try {
-      await fetch("http://localhost:5000/leetcode/connect", {
+      await fetch(`${import.meta.env.VITE_BACKEND_URL}/leetcode/connect`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
