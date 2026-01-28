@@ -1,5 +1,8 @@
 import User from "../models/User.js";
 
+/* =========================
+   GET SWIPE FEED
+========================= */
 export const getSwipeFeed = async (req, res) => {
   try {
     const currentUser = await User.findById(req.userId);
@@ -19,7 +22,7 @@ export const getSwipeFeed = async (req, res) => {
           avatar: { $exists: true },
         },
       },
-      { $sample: { size: 10 } }, // random order
+      { $sample: { size: 10 } },
       {
         $project: {
           username: 1,
@@ -32,10 +35,14 @@ export const getSwipeFeed = async (req, res) => {
 
     res.json(users);
   } catch (err) {
+    console.error("getSwipeFeed error:", err);
     res.status(500).json({ message: "Failed to fetch swipe feed" });
   }
 };
 
+/* =========================
+   SWIPE ACTION
+========================= */
 export const swipeAction = async (req, res) => {
   const { targetUserId, action } = req.body;
 
@@ -51,62 +58,42 @@ export const swipeAction = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    /* ---------- PASS ---------- */
     if (action === "pass") {
-      user.swipes.passed.push(targetUserId);
+      if (!user.swipes.passed.includes(targetUserId)) {
+        user.swipes.passed.push(targetUserId);
+      }
+
       await user.save();
       return res.json({ status: "passed" });
     }
 
-    // LIKE LOGIC
+    /* ---------- LIKE (REQUEST-BASED) ---------- */
     if (action === "like") {
-  // prevent duplicate likes
-  if (!user.swipes.liked.includes(targetUserId)) {
-    user.swipes.liked.push(targetUserId);
-  }
+      // store like
+      if (!user.swipes.liked.includes(targetUserId)) {
+        user.swipes.liked.push(targetUserId);
+      }
 
-  const isMutual = targetUser.swipes.liked.includes(req.userId);
+      // create match request for target user
+      const alreadyRequested = targetUser.matchRequests.some(
+        (r) => r.from.toString() === req.userId
+      );
 
-  if (isMutual) {
-    // create match request ONLY if not already exists
-    const alreadyRequested = targetUser.matchRequests.some(
-      (r) => r.from.toString() === req.userId
-    );
+      if (!alreadyRequested) {
+        targetUser.matchRequests.push({
+          from: req.userId,
+          status: "pending",
+        });
+      }
 
-    if (!alreadyRequested) {
-      targetUser.matchRequests.push({
-        from: req.userId,
-        status: "pending",
-      });
-    }
-
-    await targetUser.save();
-    await user.save();
-
-    return res.json({ status: "match-request-created" });
-  }
-
-  await user.save();
-  return res.json({ status: "liked" });
-}
-
-
-    // Check mutual like
-    const isMatch = targetUser.swipes.liked.includes(req.userId);
-
-    if (isMatch) {
-      user.matches.push(targetUserId);
-      targetUser.matches.push(req.userId);
-
-      await targetUser.save();
       await user.save();
+      await targetUser.save();
 
-      return res.json({ status: "match" });
+      return res.json({ status: "request-sent" });
     }
-
-    await user.save();
-    res.json({ status: "liked" });
   } catch (err) {
+    console.error("swipeAction error:", err);
     res.status(500).json({ message: "Swipe failed" });
   }
 };
-

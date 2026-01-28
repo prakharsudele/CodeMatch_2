@@ -80,7 +80,7 @@ const Swipe = () => {
           </div>
 
           {/* Divider */}
-          <div className="w-px bg-zinc-800 h-[520px] mt-6" />
+          <div className="w-px bg-zinc-800 h-130 mt-6" />
 
           {/* Requests Sidebar */}
           <div className="w-80 shrink-0 rounded-2xl border border-zinc-800 bg-zinc-900 p-6 flex flex-col">
