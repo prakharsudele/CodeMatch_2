@@ -1,9 +1,10 @@
 import passport from "passport";
 import GitHubStrategy from "passport-github2";
 import User from "../models/User.js";
-import dotenv from "dotenv"; // 1. Add this import
 
+import dotenv from "dotenv";
 dotenv.config();
+
 
 const callbackURL =
   process.env.NODE_ENV === "production"
@@ -15,22 +16,27 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.GITHUB_CALLBACK_URL
+      callbackURL, // ✅ FIXED
     },
     async (accessToken, refreshToken, profile, done) => {
-      const user = await User.findOneAndUpdate(
-        { githubId: profile.id },
-        {
-          githubId: profile.id,
-          username: profile.username,
-          email: profile.emails?.[0]?.value
-        },
-        { upsert: true, new: true }
-      );
+      try {
+        const user = await User.findOneAndUpdate(
+          { githubId: profile.id },
+          {
+            githubId: profile.id,
+            username: profile.username,
+            email: profile.emails?.[0]?.value,
+          },
+          { upsert: true, new: true }
+        );
 
-      return done(null, user);
+        return done(null, user);
+      } catch (err) {
+        console.error("❌ GitHub strategy error:", err);
+        return done(err, null);
+      }
     }
   )
 );
 
-
+export default passport;
