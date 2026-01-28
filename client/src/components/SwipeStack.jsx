@@ -42,3 +42,5 @@ const SwipeStack = ({ users, onSwipe }) => {
     </div>
   );
 };
+
+export default SwipeStack;
