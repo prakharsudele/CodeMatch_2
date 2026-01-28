@@ -3,6 +3,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  console.log("BACKEND_URL FROM ENV:", BACKEND_URL);
+
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
