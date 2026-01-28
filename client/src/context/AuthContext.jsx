@@ -38,8 +38,23 @@ export const AuthProvider = ({ children }) => {
 };
 
   useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const tokenFromUrl = params.get("token");
+
+  if (tokenFromUrl) {
+    console.log("✅ Token received from URL");
+
+    localStorage.setItem("token", tokenFromUrl);
+
+    // remove token from URL (important)
+    window.history.replaceState({}, document.title, "/");
+
     fetchMe();
-  }, []);
+  } else {
+    fetchMe();
+  }
+}, []);
+
 
   const login = (token) => {
     localStorage.setItem("token", token);
