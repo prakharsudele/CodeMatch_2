@@ -11,7 +11,7 @@ const MyProfileCard = () => {
     <div className="relative w-80 rounded-2xl bg-zinc-900 text-white shadow-xl border border-zinc-800">
       
       {/* TOP GRADIENT */}
-      <div className="relative h-28 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-t-2xl">
+      <div className="relative h-28 bg-linear-to-r from-purple-500 to-cyan-500 rounded-t-2xl">
         <label className="absolute left-1/2 -bottom-10 -translate-x-1/2 cursor-pointer group z-10">
           <img
             src={user.avatar || "https://i.pravatar.cc/150"}

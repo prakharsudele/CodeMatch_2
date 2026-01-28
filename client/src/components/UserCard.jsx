@@ -2,7 +2,8 @@ import { motion, useAnimation } from "framer-motion";
 
 const UserCard = ({ user, onSwipe, isTop = true }) => {
   const controls = useAnimation();
-
+  if (!user || !user._id) return null;
+  
   const handleDragEnd = async (info) => {
     if (!isTop) return;
 

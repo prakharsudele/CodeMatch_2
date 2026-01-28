@@ -1,7 +1,7 @@
-import UserCard from "./UserCard";
-
 const SwipeStack = ({ users, onSwipe }) => {
-  if (!users || users.length === 0) {
+  const safeUsers = users?.filter(u => u && u._id) || [];
+
+  if (safeUsers.length === 0) {
     return (
       <div className="text-zinc-400 text-center">
         <p className="text-lg font-medium">No more developers 😕</p>
@@ -13,9 +13,9 @@ const SwipeStack = ({ users, onSwipe }) => {
   }
 
   return (
-    <div className="relative w-full max-w-sm h-[500px] flex items-center justify-center">
-      {users
-        .slice(0, 3) // show top 3 stacked cards
+    <div className="relative w-full max-w-sm h-125 flex items-center justify-center">
+      {safeUsers
+        .slice(0, 3)
         .map((user, index) => {
           const isTop = index === 0;
 
@@ -42,5 +42,3 @@ const SwipeStack = ({ users, onSwipe }) => {
     </div>
   );
 };
-
-export default SwipeStack;
