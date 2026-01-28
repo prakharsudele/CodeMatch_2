@@ -3,12 +3,16 @@ import { createContext, useContext, useEffect, useState } from "react";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   console.log("BACKEND_URL FROM ENV:", BACKEND_URL);
+
+  if (!BACKEND_URL) {
+  throw new Error("❌ VITE_BACKEND_URL is undefined at runtime");
+}
+
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const fetchMe = async () => {
   const token = localStorage.getItem("token");
