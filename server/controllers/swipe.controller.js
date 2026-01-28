@@ -17,12 +17,14 @@ export const getSwipeFeed = async (req, res) => {
       {
         $match: {
           _id: { $nin: excludedUsers },
-          github: { $exists: true },
-          leetcode: { $exists: true },
-          avatar: { $exists: true },
+          github: { $ne: null },
+          leetcode: { $ne: null },
+          avatar: { $ne: null },
         },
       },
-      { $sample: { size: 10 } },
+      { $sort: { createdAt: -1 } }, // 👈 prioritize new users
+      { $limit: 30 }, // 👈 candidate pool
+      { $sample: { size: 10 } }, // 👈 random from recent users
       {
         $project: {
           username: 1,
@@ -77,7 +79,7 @@ export const swipeAction = async (req, res) => {
 
       // create match request for target user
       const alreadyRequested = targetUser.matchRequests.some(
-        (r) => r.from.toString() === req.userId
+        (r) => r.from.toString() === req.userId,
       );
 
       if (!alreadyRequested) {
