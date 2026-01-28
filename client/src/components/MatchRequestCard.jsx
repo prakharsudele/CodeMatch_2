@@ -1,30 +1,19 @@
-import { API_BASE_URL } from "../api";
+import { useNavigate } from "react-router-dom";
 
-const MatchRequestCard = ({ user, onRespond }) => {
-  const respond = async (action) => {
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const MatchRequestCard = ({ user }) => {
+  const navigate = useNavigate();
 
-    await fetch(`${API_BASE_URL}/matches/respond`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({
-        fromUserId: user._id,
-        action,
-      }),
-    });
-
-    // 🔥 tell parent to remove this request
-    onRespond(user);
-  };
+  // 🔒 HARD GUARD
+  if (!user || !user._id) return null;
 
   return (
-    <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-800">
+    <div
+      onClick={() => navigate(`/profile/${user._id}?mode=request`)}
+      className="cursor-pointer flex items-center gap-3 p-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 transition"
+    >
       <img
-        src={user.avatar}
-        alt={user.username}
+        src={user.avatar || "/avatar-placeholder.png"}
+        alt={user.username || "User"}
         className="w-10 h-10 rounded-full object-cover"
       />
 
@@ -33,24 +22,11 @@ const MatchRequestCard = ({ user, onRespond }) => {
           {user.username}
         </p>
         <p className="text-xs text-zinc-400">
-          GitHub {user.github?.publicRepos ?? "-"} · LC {user.leetcode?.totalSolved ?? "-"}
+          Tap to view profile
         </p>
       </div>
 
-      <div className="flex gap-2">
-        <button
-          onClick={() => respond("accept")}
-          className="px-2 py-1 rounded-md bg-green-600 hover:bg-green-500 text-xs"
-        >
-          ✓
-        </button>
-        <button
-          onClick={() => respond("reject")}
-          className="px-2 py-1 rounded-md bg-red-600 hover:bg-red-500 text-xs"
-        >
-          ✕
-        </button>
-      </div>
+      <div className="text-xs text-zinc-400">→</div>
     </div>
   );
 };

@@ -7,11 +7,12 @@ export const getMatchRequests = async (req, res) => {
   );
 
   const pending = user.matchRequests.filter(
-    (r) => r.status === "pending"
+    (r) => r.status === "pending" && r.from
   );
 
   res.json(pending);
 };
+
 
 export const respondToMatchRequest = async (req, res) => {
   const { fromUserId, action } = req.body;
