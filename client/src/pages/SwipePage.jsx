@@ -20,29 +20,28 @@ const Swipe = () => {
 
   /* Fetch swipe feed */
   /* Fetch swipe feed (with refresh on focus) */
-useEffect(() => {
-  const fetchFeed = () => {
-    fetch(`${API_BASE_URL}/swipe/feed`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then(setUsers)
-      .catch(console.error);
-  };
+  useEffect(() => {
+    const fetchFeed = () => {
+      fetch(`${API_BASE_URL}/swipe/feed`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then(setUsers)
+        .catch(console.error);
+    };
 
-  // initial load
-  fetchFeed();
+    // initial load
+    fetchFeed();
 
-  // refetch when user comes back to tab / page
-  window.addEventListener("focus", fetchFeed);
+    // refetch when user comes back to tab / page
+    window.addEventListener("focus", fetchFeed);
 
-  return () => {
-    window.removeEventListener("focus", fetchFeed);
-  };
-}, []);
-
+    return () => {
+      window.removeEventListener("focus", fetchFeed);
+    };
+  }, []);
 
   /* Fetch match requests */
   useEffect(() => {
@@ -115,13 +114,11 @@ useEffect(() => {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {matchRequests.map((req) => (
-                    <MatchRequestCard
-                      key={req.from._id}
-                      user={req.from}
-                      onRespond={handleRespond}
-                    />
-                  ))}
+                  {matchRequests
+                    .filter((req) => req?.from)
+                    .map((req) => (
+                      <MatchRequestCard key={req.from._id} user={req.from} />
+                    ))}
                 </div>
               )}
             </div>
