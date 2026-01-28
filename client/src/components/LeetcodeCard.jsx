@@ -1,5 +1,6 @@
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
+import { API_BASE_URL } from "../api";
 
 const LeetcodeCard = () => {
   const { user, refetchUser } = useAuth();
@@ -13,7 +14,7 @@ const LeetcodeCard = () => {
     setLoading(true);
 
     try {
-      await fetch(`${import.meta.env.VITE_BACKEND_URL}/leetcode/connect`, {
+      await fetch(`${API_BASE_URL}/leetcode/connect`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

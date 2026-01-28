@@ -1,5 +1,6 @@
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
+import { API_BASE_URL } from "../api";
 
 const GithubCard = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -9,7 +10,7 @@ const GithubCard = () => {
   const connectGithub = async () => {
     setLoading(true);
     try {
-      await fetch(`${import.meta.env.VITE_BACKEND_URL}/github/sync`, {
+      await fetch(`${API_BASE_URL}/github/sync`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

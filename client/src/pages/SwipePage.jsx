@@ -6,6 +6,7 @@ import SwipeStack from "../components/SwipeStack";
 import MatchRequestCard from "../components/MatchRequestCard";
 import Navbar from "../components/Navbar.jsx";
 import MatchModal from "../components/MatchModal";
+import { API_BASE_URL } from "../api";
 
 const Swipe = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -19,7 +20,7 @@ const Swipe = () => {
 
   /* Fetch swipe feed */
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/swipe/feed`, {
+    fetch(`${API_BASE_URL}/swipe/feed`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -30,7 +31,7 @@ const Swipe = () => {
 
   /* Fetch match requests */
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/matches/requests`, {
+    fetch(`${API_BASE_URL}/matches/requests`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -47,7 +48,7 @@ const Swipe = () => {
   };
 
   const handleSwipe = async (direction, userId) => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/swipe`, {
+    fetch(`${API_BASE_URL}/swipe`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

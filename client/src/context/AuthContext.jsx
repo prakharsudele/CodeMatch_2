@@ -1,17 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { API_BASE_URL } from "../api";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
-const baseUrl = BACKEND_URL?.replace(/\/+$/, "");
-
-console.log("RAW BACKEND_URL:", BACKEND_URL);
-console.log("CLEANED baseUrl:", baseUrl);
-
-
-
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -26,7 +18,7 @@ console.log("CLEANED baseUrl:", baseUrl);
   // 🔥 This removes any extra slashes at the end of your BACKEND_URL
 
   try {
-    const res = await fetch(`${baseUrl}/user/me`, { // Now it will be .app/user/me
+    const res = await fetch(`${API_BASE_URL}/user/me`, { // Now it will be .app/user/me
       headers: {
         Authorization: `Bearer ${token}`,
       },

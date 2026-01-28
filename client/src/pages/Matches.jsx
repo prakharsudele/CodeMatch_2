@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
+import { API_BASE_URL } from "../api";
 
 const Matches = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -10,7 +11,7 @@ const Matches = () => {
   const [matches, setMatches] = useState([]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/matches`, {
+    fetch(`${API_BASE_URL}/matches`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
