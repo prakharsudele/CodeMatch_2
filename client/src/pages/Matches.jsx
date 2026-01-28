@@ -1,4 +1,11 @@
-{matches.length === 0 ? (
+import { useNavigate } from "react-router-dom";
+
+const MatchRequestCard = ({ user }) => {
+  const navigate = useNavigate();
+
+  return (
+    <>
+    {matches.length === 0 ? (
   <div className="text-center text-zinc-500 mt-20">
     No matches yet. Keep swiping 👋
   </div>
@@ -31,3 +38,9 @@
       ))}
   </div>
 )}
+
+    </>
+  );
+};
+
+export default MatchRequestCard;
