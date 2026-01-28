@@ -25,6 +25,7 @@ passport.use(
           {
             githubId: profile.id,
             username: profile.username,
+            avatar: profile.photos?.[0]?.value,
             email: profile.emails?.[0]?.value,
           },
           { upsert: true, new: true }
