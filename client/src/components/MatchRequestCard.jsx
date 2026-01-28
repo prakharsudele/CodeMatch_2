@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 const MatchRequestCard = ({ user }) => {
   const navigate = useNavigate();
 
-  // 🔒 HARD GUARD
-  if (!user || !user._id) return null;
+  if (!user) return null;
 
   return (
     <div
@@ -12,7 +11,7 @@ const MatchRequestCard = ({ user }) => {
       className="cursor-pointer flex items-center gap-3 p-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 transition"
     >
       <img
-        src={user.avatar || "/avatar-placeholder.png"}
+        src={user.avatar || "https://i.pravatar.cc/150"}
         alt={user.username || "User"}
         className="w-10 h-10 rounded-full object-cover"
       />
