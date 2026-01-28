@@ -3,7 +3,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const BACKEND_URL = "https://code-match-backend.vercel.app";
+
   console.log("BACKEND_URL FROM ENV:", BACKEND_URL);
 
   if (!BACKEND_URL) {
@@ -23,7 +24,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   // 🔥 This removes any extra slashes at the end of your BACKEND_URL
-  const baseUrl = BACKEND_URL.replace(/\/+$/, ""); 
+  const baseUrl = BACKEND_URL;
 
   try {
     const res = await fetch(`${baseUrl}/user/me`, { // Now it will be .app/user/me
