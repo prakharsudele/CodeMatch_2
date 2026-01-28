@@ -16,21 +16,19 @@ connectDB();
 
 const app = express();
 
-app.use(
-  cors({
-    origin: [
-      "https://code-match-client.vercel.app",
-      "https://code-match-client-qsjpxfnm1-prakhar-sudeles-projects.vercel.app",
-      "http://localhost:5173",
-    ],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+app.use(cors({
+  origin: [
+    "https://code-match-client.vercel.app",
+    "https://code-match-client-qsjpxfnm1-prakhar-sudeles-projects.vercel.app",
+    "http://localhost:5173",
+  ],
+  credentials: true,
+}));
 
+app.options("*", cors()); // 👈 REQUIRED
 
 app.use(express.json());
+
 
 app.use(
   session({
