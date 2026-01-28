@@ -1,9 +1,11 @@
 const ProfilePreview = ({ user, actions }) => {
+  if (!user || !user._id) return null;
+
   return (
     <div className="max-w-md mx-auto rounded-2xl bg-zinc-900 border border-zinc-800 p-6">
       <img
-        src={user.avatar}
-        alt={user.username}
+        src={user.avatar || "https://i.pravatar.cc/150"}
+        alt={user.username || "User"}
         className="w-32 h-32 rounded-full mx-auto"
       />
 
