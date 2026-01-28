@@ -1,5 +1,3 @@
-import SwipeStack from "../components/SwipeStack";
-import { users } from "../data/users";
 import Footer from "../components/Footer";
 import AuthModal from "../components/AuthModal.jsx";
 import { useAuth } from "../context/AuthContext";
@@ -18,20 +16,19 @@ export default function Landing() {
 
       <div className="min-h-screen bg-zinc-950">
         <section className="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-16 items-center">
-          
           {/* LEFT */}
           <div>
             <h1 className="text-5xl font-extrabold leading-tight text-white">
               Swipe to find your{" "}
-              <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
                 coding match
               </span>
             </h1>
 
             <p className="mt-6 text-xl text-zinc-300 max-w-xl">
               CodeMatch helps developers discover like-minded programmers for
-              learning, hackathons, and real-world collaboration — without awkward
-              DMs.
+              learning, hackathons, and real-world collaboration — without
+              awkward DMs.
             </p>
 
             {/* How it works */}
@@ -63,14 +60,14 @@ export default function Landing() {
               {!user ? (
                 <button
                   onClick={() => setOpen(true)}
-                  className="px-8 py-3 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 transition font-semibold text-lg shadow-lg shadow-purple-500/20"
+                  className="px-8 py-3 rounded-full bg-linear-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 transition font-semibold text-lg shadow-lg shadow-purple-500/20"
                 >
                   Sign up with GitHub
                 </button>
               ) : (
                 <button
                   onClick={() => navigate("/home")}
-                  className="px-8 py-3 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 transition font-semibold text-lg shadow-lg shadow-green-500/20"
+                  className="px-8 py-3 rounded-full bg-linear-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 transition font-semibold text-lg shadow-lg shadow-green-500/20"
                 >
                   Go to Home
                 </button>
@@ -86,7 +83,13 @@ export default function Landing() {
           <AuthModal isOpen={open} onClose={() => setOpen(false)} />
 
           {/* RIGHT */}
-          <SwipeStack users={users} />
+          <div className="hidden md:block">
+            <img
+              src="/landing-preview.png"
+              alt="CodeMatch preview"
+              className="rounded-2xl shadow-xl"
+            />
+          </div>
         </section>
 
         <Footer />
