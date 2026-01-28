@@ -1,4 +1,12 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+import jwt from "jsonwebtoken";
+
+
 const authMiddleware = (req, res, next) => {
+  console.log("JWT_SECRET exists?", !!process.env.JWT_SECRET);
+
   // ✅ Allow CORS preflight
   if (req.method === "OPTIONS") {
     return res.sendStatus(204);
