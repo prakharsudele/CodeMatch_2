@@ -5,6 +5,7 @@ import SwipePage from "./pages/SwipePage";
 import RequireAuth from "./components/RequireAuth";
 import Home from "./pages/Home";
 import Matches from "./pages/Matches";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -40,6 +41,8 @@ function App() {
             </RequireAuth>
           }
         />
+
+        <Route path="/profile/:userId" element={<ProfilePage />} />
       </Routes>
     </BrowserRouter>
   );
