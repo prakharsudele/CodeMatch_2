@@ -35,7 +35,7 @@ const Home = () => {
           {/* Progress bar */}
           <div className="w-full h-3 bg-zinc-800 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-purple-500 to-cyan-500 transition-all"
+              className="h-full bg-linear-to-r from-purple-500 to-cyan-500 transition-all"
               style={{ width: `${percent}%` }}
             />
           </div>
@@ -74,7 +74,7 @@ const Home = () => {
     ${
       percent < 70
         ? "bg-zinc-700 cursor-not-allowed"
-        : "bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400"
+        : "bg-linear-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400"
     }
   `}
           >
