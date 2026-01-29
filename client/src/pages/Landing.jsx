@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
+import LandingPreviewCard from "../components/LandingPreviewCard";
 
 export default function Landing() {
   const { user } = useAuth();
@@ -81,14 +82,10 @@ export default function Landing() {
 
           {/* Auth Modal */}
           <AuthModal isOpen={open} onClose={() => setOpen(false)} />
-
+            
           {/* RIGHT */}
-          <div className="hidden md:block">
-            <img
-              src="/landing-preview.png"
-              alt="CodeMatch preview"
-              className="rounded-2xl shadow-xl"
-            />
+          <div className="hidden md:flex justify-center">
+            <LandingPreviewCard />
           </div>
         </section>
 
