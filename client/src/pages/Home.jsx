@@ -9,7 +9,18 @@ import { getProfileCompleteness } from "../utils/profileCompleteness";
 const Home = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+
+   const [linkedin, setLinkedin] = useState(user?.linkedin || "");
+  const [saving, setSaving] = useState(false);
+
   const { percent, missing } = getProfileCompleteness(user);
+
+  useEffect(() => {
+  if (user?.linkedin) {
+    setLinkedin(user.linkedin);
+  }
+}, [user]);
+
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
