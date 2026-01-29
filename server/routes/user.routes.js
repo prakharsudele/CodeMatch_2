@@ -8,6 +8,6 @@ router.get("/me", authMiddleware, getMe);
 
 router.get("/:id", authMiddleware, getUserProfile);
 
-router.patch("/me", authMiddleware, updateProfile);
+router.patch("/linkedin", authMiddleware, updateProfile);
 
 export default router;
