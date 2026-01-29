@@ -5,23 +5,46 @@ import { useNavigate } from "react-router-dom";
 import MyProfileCard from "../components/MyProfileCard";
 import { useAuth } from "../context/AuthContext";
 import { getProfileCompleteness } from "../utils/profileCompleteness";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Home = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-   const [linkedin, setLinkedin] = useState(user?.linkedin || "");
+  const [linkedin, setLinkedin] = useState(user?.linkedin || "");
   const [saving, setSaving] = useState(false);
 
   const { percent, missing } = getProfileCompleteness(user);
 
-  useEffect(() => {
-  if (user?.linkedin) {
-    setLinkedin(user.linkedin);
-  }
-}, [user]);
+  const saveLinkedIn = async () => {
+    if (!linkedin) return;
 
+    try {
+      setSaving(true);
+
+      await fetch(`${API_BASE_URL}/user/linkedin`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ linkedin }),
+      });
+
+      alert("LinkedIn saved successfully ✅");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save LinkedIn ❌");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  useEffect(() => {
+    if (user?.linkedin) {
+      setLinkedin(user.linkedin);
+    }
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
@@ -115,13 +138,29 @@ const Home = () => {
         </section>
 
         {/* //LinkedIn */}
-        <input
-          type="url"
-          placeholder="LinkedIn profile URL"
-          value={linkedin}
-          onChange={(e) => setLinkedin(e.target.value)}
-          className="w-full px-4 py-2 rounded-lg bg-zinc-800 text-white border border-zinc-700"
-        />
+        <section className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 space-y-4">
+          <h3 className="text-xl font-semibold">LinkedIn Profile</h3>
+
+          <input
+            type="url"
+            placeholder="https://www.linkedin.com/in/username"
+            value={linkedin}
+            onChange={(e) => setLinkedin(e.target.value)}
+            className="w-full px-4 py-2 rounded-lg bg-zinc-800 text-white border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+          />
+
+          <button
+            onClick={saveLinkedIn}
+            disabled={saving}
+            className={`px-6 py-2 rounded-lg font-medium transition ${
+              saving
+                ? "bg-zinc-700 cursor-not-allowed"
+                : "bg-linear-to-r from-purple-500 to-cyan-500 hover:opacity-90"
+            }`}
+          >
+            {saving ? "Saving..." : "Save LinkedIn"}
+          </button>
+        </section>
       </main>
     </div>
   );
