@@ -1,3 +1,6 @@
+import UserCard from "./UserCard";
+
+
 const SwipeStack = ({ users, onSwipe }) => {
   const safeUsers = users?.filter(u => u && u._id) || [];
 
