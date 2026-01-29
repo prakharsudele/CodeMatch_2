@@ -6,6 +6,7 @@ import RequireAuth from "./components/RequireAuth";
 import Home from "./pages/Home";
 import Matches from "./pages/Matches";
 import ProfilePage from "./pages/ProfilePage";
+import MyProfile from "./pages/MyProfile";
 
 function App() {
   return (
@@ -20,6 +21,15 @@ function App() {
           element={
             <RequireAuth>
               <Home />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/profile/me"
+          element={
+            <RequireAuth>
+              <MyProfile />
             </RequireAuth>
           }
         />

@@ -7,8 +7,6 @@ import { useAuth } from "../context/AuthContext";
 import { getProfileCompleteness } from "../utils/profileCompleteness";
 import { useState, useEffect } from "react";
 import { API_BASE_URL } from "../api";
-import MyPublicProfile from "../components/MyPublicProfile";
-import SocialLinksEditor from "../components/SocialLinksEditor";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -105,15 +103,6 @@ const Home = () => {
         <section className="grid md:grid-cols-2 gap-6">
           <GithubCard />
           <LeetcodeCard />
-        </section>
-
-        {/* //LinkedIn */}
-        <section className="space-y-8">
-          <h3 className="text-2xl font-bold">Your public profile</h3>
-
-          <MyPublicProfile />
-
-          <SocialLinksEditor initialLinkedin={user?.linkedin} />
         </section>
       </main>
     </div>

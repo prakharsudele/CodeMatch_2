@@ -53,7 +53,7 @@ const Navbar = () => {
               </Link>
 
               {/* Matches */}
-              <Link to="/matches" className={`text-sm font-medium ${isActive("/matches")}`}>
+              <Link to="/matches" className={`text-sm font-medium  ${isActive("/matches")}`}>
                 Matches
               </Link>
 
@@ -100,10 +100,7 @@ const Navbar = () => {
                 {openMenu && (
                   <div className="absolute right-0 mt-2 w-40 rounded-xl bg-zinc-900 border border-zinc-800 shadow-xl overflow-hidden">
                     <button
-                      onClick={() => {
-                        navigate("/home");
-                        setOpenMenu(false);
-                      }}
+                      onClick={() => navigate("/profile/me")}
                       className="w-full text-left px-4 py-2 text-sm hover:bg-zinc-800"
                     >
                       My Profile
