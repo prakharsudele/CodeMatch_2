@@ -27,7 +27,7 @@ const ProfilePreview = ({ user, actions }) => {
         <div className="mt-6 flex justify-center gap-3 flex-wrap">
           {user.github && (
             <a
-              href={user.github.html_url}
+              href={`https://github.com/${user.username}`}
               target="_blank"
               rel="noreferrer"
               className="px-4 py-1.5 rounded-full text-sm font-medium bg-zinc-800 hover:bg-zinc-700 text-white transition"
@@ -38,7 +38,7 @@ const ProfilePreview = ({ user, actions }) => {
 
           {user.leetcode && (
             <a
-              href={user.leetcode.profile}
+              href={`https://leetcode.com/${user.leetcode.username}`}
               target="_blank"
               rel="noreferrer"
               className="px-4 py-1.5 rounded-full text-sm font-medium bg-zinc-800 hover:bg-zinc-700 text-white transition"
