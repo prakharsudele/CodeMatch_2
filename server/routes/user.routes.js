@@ -6,8 +6,8 @@ const router = express.Router();
 
 router.get("/me", authMiddleware, getMe);
 
-router.get("/:id", authMiddleware, getUserProfile);
-
 router.patch("/linkedin", authMiddleware, updateProfile);
+
+router.get("/:id", authMiddleware, getUserProfile);
 
 export default router;

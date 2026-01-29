@@ -24,7 +24,7 @@ const Home = () => {
       setSaving(true);
 
       await fetch(`${API_BASE_URL}/user/linkedin`, {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
