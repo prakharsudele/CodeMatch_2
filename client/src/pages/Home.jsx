@@ -6,6 +6,7 @@ import MyProfileCard from "../components/MyProfileCard";
 import { useAuth } from "../context/AuthContext";
 import { getProfileCompleteness } from "../utils/profileCompleteness";
 import { useState, useEffect } from "react";
+import { API_BASE_URL } from "../api";
 
 const Home = () => {
   const navigate = useNavigate();
