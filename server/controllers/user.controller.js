@@ -31,3 +31,20 @@ export const getUserProfile = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch user profile" });
   }
 };
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { linkedin } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      { linkedin },
+      { new: true }
+    );
+
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update profile" });
+  }
+};
+

@@ -101,6 +101,15 @@ const Home = () => {
           <GithubCard />
           <LeetcodeCard />
         </section>
+
+        {/* //LinkedIn */}
+        <input
+          type="url"
+          placeholder="LinkedIn profile URL"
+          value={linkedin}
+          onChange={(e) => setLinkedin(e.target.value)}
+          className="w-full px-4 py-2 rounded-lg bg-zinc-800 text-white border border-zinc-700"
+        />
       </main>
     </div>
   );

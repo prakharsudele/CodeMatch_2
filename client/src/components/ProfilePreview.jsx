@@ -14,34 +14,40 @@ const ProfilePreview = ({ user, actions }) => {
       </h2>
 
       <div className="flex justify-center gap-4 mt-4">
-        {user.github && (
-          <a
-            href={user.github.html_url}
-            target="_blank"
-            className="text-blue-400 text-sm"
-          >
-            GitHub
-          </a>
-        )}
-        {user.leetcode && (
-          <a
-            href={user.leetcode.profile}
-            target="_blank"
-            className="text-yellow-400 text-sm"
-          >
-            LeetCode
-          </a>
-        )}
-        {user.linkedin && (
-          <a
-            href={user.linkedin}
-            target="_blank"
-            className="text-sky-400 text-sm"
-          >
-            LinkedIn
-          </a>
-        )}
-      </div>
+  {user.github && (
+    <a
+      href={`https://github.com/${user.username}`}
+      target="_blank"
+      rel="noreferrer"
+      className="text-blue-400 text-sm hover:underline"
+    >
+      GitHub
+    </a>
+  )}
+
+  {user.leetcode && (
+    <a
+      href={`https://leetcode.com/${user.leetcode.username}`}
+      target="_blank"
+      rel="noreferrer"
+      className="text-yellow-400 text-sm hover:underline"
+    >
+      LeetCode
+    </a>
+  )}
+
+  {user.linkedin && (
+    <a
+      href={user.linkedin}
+      target="_blank"
+      rel="noreferrer"
+      className="text-sky-400 text-sm hover:underline"
+    >
+      LinkedIn
+    </a>
+  )}
+</div>
+
 
       {actions && <div className="mt-6">{actions}</div>}
     </div>

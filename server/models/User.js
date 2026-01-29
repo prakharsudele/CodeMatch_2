@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema(
       hard: Number,
       lastSynced: Date,
     },
+    linkedin: {
+      type: String,
+      default:"",
+    },
     swipes: {
       liked: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
       passed: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
