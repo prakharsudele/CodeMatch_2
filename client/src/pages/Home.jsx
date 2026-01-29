@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import MyProfileCard from "../components/MyProfileCard";
 import { useAuth } from "../context/AuthContext";
 import { getProfileCompleteness } from "../utils/profileCompleteness";
+import { useState } from "react";
 
 const Home = () => {
   const navigate = useNavigate();
