@@ -1,46 +1,79 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import Navbar from "../components/Navbar";
+import { API_BASE_URL } from "../api";
 
-const MatchRequestCard = ({ user }) => {
+const Matches = () => {
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const [matches, setMatches] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/matches`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setMatches(data || []))
+      .catch(console.error);
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (!user) return <Navigate to="/" replace />;
 
   return (
     <>
-    {matches.length === 0 ? (
-  <div className="text-center text-zinc-500 mt-20">
-    No matches yet. Keep swiping 👋
-  </div>
-) : (
-  <div className="grid md:grid-cols-2 gap-6">
-    {matches
-      .filter((match) => match && match._id)
-      .map((match) => (
-        <div
-          key={match._id}
-          onClick={() => navigate(`/profile/${match._id}`)}
-          className="cursor-pointer flex items-center gap-4 p-5 rounded-2xl bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 transition"
-        >
-          <img
-            src={match.avatar || "https://i.pravatar.cc/150"}
-            alt={match.username || "User"}
-            className="w-16 h-16 rounded-full object-cover"
-          />
+      <Navbar />
 
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold text-white">
-              {match.username || "Unknown User"}
-            </h3>
-          </div>
+      <div className="min-h-screen bg-zinc-950 px-6 py-12">
+        <div className="max-w-5xl mx-auto">
+          <h1 className="text-3xl font-bold text-white mb-2">
+            Your Matches
+          </h1>
 
-          <div className="text-xs text-zinc-500">
-            View Profile →
-          </div>
+          <p className="text-zinc-400 mb-8">
+            Developers you’ve matched with.
+          </p>
+
+          {matches.length === 0 ? (
+            <div className="text-center text-zinc-500 mt-20">
+              No matches yet. Keep swiping 👋
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-6">
+              {matches
+                .filter((m) => m && m._id)
+                .map((match) => (
+                  <div
+                    key={match._id}
+                    onClick={() => navigate(`/profile/${match._id}`)}
+                    className="cursor-pointer flex items-center gap-4 p-5 rounded-2xl bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 transition"
+                  >
+                    <img
+                      src={match.avatar || "https://i.pravatar.cc/150"}
+                      alt={match.username || "User"}
+                      className="w-16 h-16 rounded-full object-cover"
+                    />
+
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-white">
+                        {match.username || "Unknown User"}
+                      </h3>
+                    </div>
+
+                    <div className="text-xs text-zinc-500">
+                      View Profile →
+                    </div>
+                  </div>
+                ))}
+            </div>
+          )}
         </div>
-      ))}
-  </div>
-)}
-
+      </div>
     </>
   );
 };
 
-export default MatchRequestCard;
+export default Matches;
