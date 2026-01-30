@@ -16,17 +16,18 @@ const GithubCard = () => {
     // 🔁 ALREADY CONNECTED → sync
     setLoading(true);
     try {
-      await fetch(`${API_BASE_URL}/github/sync`, {
+      const res = await fetch(`${API_BASE_URL}/github/sync`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      await refetchUser();
+
+      if (res.ok) {
+        await refetchUser();
+      }
     } catch (err) {
-      console.error("GitHub sync failed", err);
-    } finally {
-      setLoading(false);
+      console.warn("GitHub sync skipped");
     }
   };
 
