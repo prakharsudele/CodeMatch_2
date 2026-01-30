@@ -25,12 +25,34 @@ const userSchema = new mongoose.Schema(
     },
     linkedin: {
       type: String,
-      default:"",
+      default: "",
     },
     swipes: {
       liked: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
       passed: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     },
+    notifications: [
+      {
+        type: {
+          type: String,
+          enum: ["match_request", "match_accepted"],
+          required: true,
+        },
+        from: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        read: {
+          type: Boolean,
+          default: false,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
 
     matchRequests: [
       {

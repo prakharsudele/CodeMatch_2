@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import { notifyUser } from "../utils/notify.js";
 
 /* =========================
    GET SWIPE FEED
@@ -88,6 +89,12 @@ export const swipeAction = async (req, res) => {
           status: "pending",
         });
       }
+
+      await notifyUser({
+        toUserId: targetUser._id,
+        fromUserId: req.userId,
+        type: "match_request",
+      });
 
       await user.save();
       await targetUser.save();

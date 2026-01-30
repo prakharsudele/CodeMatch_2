@@ -1,18 +1,18 @@
 import User from "../models/User.js";
+import { notifyUser } from "../utils/notify.js";
 
 export const getMatchRequests = async (req, res) => {
   const user = await User.findById(req.userId).populate(
     "matchRequests.from",
-    "username avatar github leetcode"
+    "username avatar github leetcode",
   );
 
   const pending = user.matchRequests.filter(
-    (r) => r.status === "pending" && r.from
+    (r) => r.status === "pending" && r.from,
   );
 
   res.json(pending);
 };
-
 
 export const respondToMatchRequest = async (req, res) => {
   const { fromUserId, action } = req.body;
@@ -25,7 +25,7 @@ export const respondToMatchRequest = async (req, res) => {
   const fromUser = await User.findById(fromUserId);
 
   const request = user.matchRequests.find(
-    (r) => r.from.toString() === fromUserId
+    (r) => r.from.toString() === fromUserId,
   );
 
   if (!request) {
@@ -42,6 +42,11 @@ export const respondToMatchRequest = async (req, res) => {
     if (!fromUser.matches.includes(req.userId)) {
       fromUser.matches.push(req.userId);
     }
+    await notifyUser({
+      toUserId: fromUserId,
+      fromUserId: req.userId,
+      type: "match_accepted",
+    });
   }
 
   await user.save();
@@ -51,8 +56,10 @@ export const respondToMatchRequest = async (req, res) => {
 };
 
 export const getMatches = async (req, res) => {
-  const user = await User.findById(req.userId)
-    .populate("matches", "username avatar github leetcode linkedin");
+  const user = await User.findById(req.userId).populate(
+    "matches",
+    "username avatar github leetcode linkedin",
+  );
 
   res.json(user.matches);
 };

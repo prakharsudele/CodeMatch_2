@@ -2,11 +2,17 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import AuthModal from "./AuthModal";
+import NotificationsDropdown from "./NotificationsDropdown";
+import { fetchNotifications } from "../api/notifications";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const [openAuth, setOpenAuth] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
+
+  const [openNotifications, setOpenNotifications] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -15,11 +21,19 @@ const Navbar = () => {
       ? "text-white"
       : "text-zinc-400 hover:text-white";
 
+  useEffect(() => {
+    if (!user) return;
+
+    fetchNotifications().then((data) => {
+      const unread = data.filter((n) => !n.read).length;
+      setUnreadCount(unread);
+    });
+  }, [user]);
+
   return (
     <>
       <nav className="w-full border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-
           {/* Logo */}
           <Link
             to="/"
@@ -46,14 +60,19 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="flex items-center gap-6">
-
               {/* Home */}
-              <Link to="/home" className={`text-sm font-medium ${isActive("/home")}`}>
+              <Link
+                to="/home"
+                className={`text-sm font-medium ${isActive("/home")}`}
+              >
                 Home
               </Link>
 
               {/* Matches */}
-              <Link to="/matches" className={`text-sm font-medium  ${isActive("/matches")}`}>
+              <Link
+                to="/matches"
+                className={`text-sm font-medium  ${isActive("/matches")}`}
+              >
                 Matches
               </Link>
 
@@ -72,14 +91,24 @@ const Navbar = () => {
               </Link>
 
               {/* Notifications (placeholder) */}
-              <button
-                className="relative text-zinc-400 hover:text-white transition"
-                title="Notifications"
-              >
-                🔔
-                {/* future badge */}
-                {/* <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" /> */}
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => setOpenNotifications((p) => !p)}
+                  className="relative text-zinc-400 hover:text-white transition"
+                  title="Notifications"
+                >
+                  🔔
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full" />
+                  )}
+                </button>
+
+                {openNotifications && (
+                  <NotificationsDropdown
+                    onClose={() => setOpenNotifications(false)}
+                  />
+                )}
+              </div>
 
               {/* Profile dropdown */}
               <div className="relative">

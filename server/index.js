@@ -14,6 +14,7 @@ import githubRoutes from "./routes/github.routes.js";
 import leetcodeRoutes from "./routes/leetcode.routes.js";
 import swipeRoutes from "./routes/swipe.routes.js";
 import matchRoutes from "./routes/match.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
 
 connectDB();
 
@@ -38,6 +39,7 @@ app.use("/github", githubRoutes);
 app.use("/leetcode", leetcodeRoutes);
 app.use("/swipe", swipeRoutes);
 app.use("/matches", matchRoutes);
+app.use("/notifications", notificationRoutes);
 
 app.get("/", (req, res) => {
   res.send("CodeMatch API running");
