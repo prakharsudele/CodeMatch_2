@@ -8,29 +8,38 @@ const LeetcodeCard = () => {
   const [loading, setLoading] = useState(false);
 
   const connectLeetcode = async () => {
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  setLoading(true);
 
-    if (!username) return;
-    setLoading(true);
+  try {
+    const endpoint = user?.leetcode
+      ? `${API_BASE_URL}/leetcode/sync`
+      : `${API_BASE_URL}/leetcode/connect`;
 
-    try {
-      await fetch(`${API_BASE_URL}/leetcode/connect`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ username }),
-      });
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    };
 
-      await refetchUser();
-      setUsername("");
-    } catch (err) {
-      console.error("LeetCode connect failed");
-    } finally {
-      setLoading(false);
+    // only send username when connecting for first time
+    if (!user?.leetcode) {
+      if (!username) return;
+      options.body = JSON.stringify({ username });
     }
-  };
+
+    await fetch(endpoint, options);
+
+    await refetchUser();
+    setUsername("");
+  } catch (err) {
+    console.error("LeetCode sync/connect failed", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 space-y-4">

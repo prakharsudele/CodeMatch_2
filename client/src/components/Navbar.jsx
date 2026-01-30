@@ -94,7 +94,7 @@ const Navbar = () => {
               <div className="relative">
                 <button
                   onClick={() => setOpenNotifications((p) => !p)}
-                  className="relative text-zinc-400 hover:text-white transition"
+                  className="relative text-zinc-400 hover:text-white transition cursor-pointer"
                   title="Notifications"
                 >
                   🔔

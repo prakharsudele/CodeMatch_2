@@ -1,51 +1,42 @@
-import React from "react";
-
 const Footer = () => {
   return (
-    <footer className="mt-32 border-t border-zinc-800 bg-zinc-950">
-      <div className="max-w-7xl mx-auto px-6 py-14 grid gap-12 md:grid-cols-3">
+    <footer className="border-t border-zinc-800 bg-zinc-950 text-zinc-400">
+      <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
         
-        {/* Brand */}
-        <div>
-          <h2 className="text-2xl font-extrabold">
-            <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              CodeMatch
-            </span>
-          </h2>
-          <p className="mt-3 text-zinc-400 max-w-sm">
-            Swipe. Match. Build.  
-            Find developers who code like you.
-          </p>
-        </div>
+        {/* Left */}
+        <p className="text-sm">
+          © {new Date().getFullYear()} CodeMatch · Built by{" "}
+          <span className="text-white font-medium">
+            Prakhar Sudele
+          </span>
+        </p>
 
-        {/* Links */}
-        <div>
-          <h3 className="text-sm font-semibold text-zinc-300 uppercase tracking-wide">
-            Product
-          </h3>
-          <ul className="mt-4 space-y-2 text-zinc-400">
-            <li className="hover:text-white cursor-pointer">How it works</li>
-            <li className="hover:text-white cursor-pointer">Features</li>
-            <li className="hover:text-white cursor-pointer">Pricing</li>
-          </ul>
-        </div>
+        {/* Right */}
+        <div className="flex items-center gap-5 text-sm">
+          <a
+            href="https://github.com/prakharsudele"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-white transition"
+          >
+            GitHub
+          </a>
 
-        {/* Community */}
-        <div>
-          <h3 className="text-sm font-semibold text-zinc-300 uppercase tracking-wide">
-            Community
-          </h3>
-          <ul className="mt-4 space-y-2 text-zinc-400">
-            <li className="hover:text-white cursor-pointer">GitHub</li>
-            <li className="hover:text-white cursor-pointer">LinkedIn</li>
-            <li className="hover:text-white cursor-pointer">Contact</li>
-          </ul>
-        </div>
-      </div>
+          <a
+            href="https://www.linkedin.com/in/prakhar-sudele"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-white transition"
+          >
+            LinkedIn
+          </a>
 
-      {/* Bottom bar */}
-      <div className="border-t border-zinc-800 py-6 text-center text-zinc-500 text-sm">
-        © {new Date().getFullYear()} CodeMatch. Built for developers.
+          <span className="text-zinc-600">•</span>
+
+          <span className="text-zinc-500">
+            Made with ❤️ for developers
+          </span>
+        </div>
       </div>
     </footer>
   );

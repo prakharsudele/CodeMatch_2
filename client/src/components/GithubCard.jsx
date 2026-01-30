@@ -3,7 +3,6 @@ import { useState } from "react";
 import { API_BASE_URL } from "../api";
 
 const GithubCard = () => {
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const { user, refetchUser } = useAuth();
   const [loading, setLoading] = useState(false);
 

@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const MyProfileCard = () => {
   const { user, setUser } = useAuth();
   if (!user) return null;
+
+  const navigate = useNavigate();
 
   const github = user.github;
   const leetcode = user.leetcode;
@@ -91,7 +94,7 @@ const MyProfileCard = () => {
           </p>
         )}
 
-        <button className="mt-6 w-full py-2 rounded-lg bg-zinc-800 text-white font-medium cursor-default">
+        <button onClick={() => navigate("/profile/me")} className="mt-6 w-full py-2 rounded-lg bg-zinc-800 text-white font-medium cursor-default">
           Your Profile
         </button>
       </div>

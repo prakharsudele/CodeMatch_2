@@ -1,64 +1,29 @@
-import axios from "axios";
 import User from "../models/User.js";
+import axios from "axios";
 
-export const connectLeetcode = async (req, res) => {
+export const syncLeetcode = async (req, res) => {
   try {
-    const { username } = req.body;
-
-    const query = `
-      query getUserProfile($username: String!) {
-        matchedUser(username: $username) {
-          username
-          profile {
-            realName
-          }
-          submitStats {
-            acSubmissionNum {
-              difficulty
-              count
-            }
-          }
-        }
-      }
-    `;
-
-    const response = await axios.post(
-      "https://leetcode.com/graphql",
-      {
-        query,
-        variables: { username },
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Referer: "https://leetcode.com",
-        },
-      }
-    );
-
-    const userData = response.data.data.matchedUser;
-    if (!userData) {
-      return res.status(404).json({ message: "LeetCode user not found" });
+    const user = await User.findById(req.userId);
+    if (!user.leetcode?.username) {
+      return res.status(400).json({ message: "LeetCode not connected" });
     }
 
-    const stats = userData.submitStats.acSubmissionNum;
+    const { data } = await axios.get(
+      `https://leetcode-stats-api.herokuapp.com/${user.leetcode.username}`
+    );
 
-    const formatted = {
-      username: userData.username,
-      name: userData.profile?.realName || userData.username,
-      easy: stats.find(s => s.difficulty === "Easy").count,
-      medium: stats.find(s => s.difficulty === "Medium").count,
-      hard: stats.find(s => s.difficulty === "Hard").count,
-      totalSolved: stats.find(s => s.difficulty === "All").count,
-      lastSynced: new Date(),
+    user.leetcode = {
+      ...user.leetcode,
+      totalSolved: data.totalSolved,
+      easy: data.easySolved,
+      medium: data.mediumSolved,
+      hard: data.hardSolved,
     };
 
-    const user = await User.findById(req.userId);
-    user.leetcode = formatted;
     await user.save();
-
-    res.json(formatted);
+    res.json(user);
   } catch (err) {
-    res.status(500).json({ message: "Failed to fetch LeetCode data" });
+    console.error("LeetCode sync error", err);
+    res.status(500).json({ message: "LeetCode sync failed" });
   }
 };

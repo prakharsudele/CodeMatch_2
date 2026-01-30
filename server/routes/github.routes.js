@@ -1,9 +1,9 @@
 import express from "express";
 import authMiddleware from "../middleware/auth.middleware.js";
-import { syncGithubStats } from "../controllers/github.controller.js";
+import { syncGithub } from "../controllers/github.controller.js";
 
 const router = express.Router();
 
-router.post("/sync", authMiddleware, syncGithubStats);
+router.post("/sync", authMiddleware, syncGithub);
 
 export default router;

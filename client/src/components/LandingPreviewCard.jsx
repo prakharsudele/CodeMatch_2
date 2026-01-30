@@ -13,13 +13,13 @@ const LandingPreviewCard = () => {
         <div className="absolute top-6 left-6 text-3xl font-bold rotate-[-20deg] opacity-60">
           ❌
         </div>
-        <div className="absolute top-6 right-6 text-3xl font-bold rotate-[20deg] opacity-60">
+        <div className="absolute top-6 right-6 text-3xl font-bold rotate-20 opacity-60">
           ❤️
         </div>
       </div>
 
       {/* Top gradient */}
-      <div className="h-28 bg-gradient-to-r from-purple-500 to-cyan-500 relative">
+      <div className="h-28 bg-linear-to-r from-purple-500 to-cyan-500 relative">
         <img
           src={demoUser.avatar}
           alt="Demo user"
