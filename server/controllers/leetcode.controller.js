@@ -44,3 +44,37 @@ export const syncLeetcode = async (req, res) => {
     });
   }
 };
+
+
+export const connectLeetcode = async (req, res) => {
+  try {
+    const { username } = req.body;
+
+    if (!username) {
+      return res.status(400).json({ message: "Username required" });
+    }
+
+    // fetch LeetCode stats
+    const data = await fetchLeetcodeStats(username);
+
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      {
+        leetcode: {
+          username,
+          name: data.name,
+          totalSolved: data.totalSolved,
+          easy: data.easy,
+          medium: data.medium,
+          hard: data.hard,
+          lastSynced: new Date(),
+        },
+      },
+      { new: true }
+    );
+
+    res.json(user.leetcode);
+  } catch (err) {
+    res.status(500).json({ message: "LeetCode connect failed" });
+  }
+};

@@ -1,13 +1,11 @@
 import jwt from "jsonwebtoken";
 
 export const githubCallback = (req, res) => {
-  const token = jwt.sign(
-    { id: req.user._id },
-    process.env.JWT_SECRET,
-    { expiresIn: "7d" }
-  );
+  const token = generateToken(req.user._id);
 
+  // ✅ redirect back to frontend with token
   res.redirect(
-    `${process.env.CLIENT_URL}?token=${token}`
+    `${process.env.CLIENT_URL}/auth/success?token=${token}`
   );
 };
+
