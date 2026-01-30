@@ -6,13 +6,14 @@ const GithubCard = () => {
   const { user, refetchUser } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  // 🔹 For FIRST TIME users (OAuth)
-  const connectGithub = () => {
-    window.location.href = `${API_BASE_URL}/github/auth`;
-  };
+  const connectGithub = async () => {
+    // 🧠 FIRST TIME → OAuth redirect
+    if (!user?.github) {
+      window.location.href = `${API_BASE_URL}/auth/github`;
+      return;
+    }
 
-  // 🔹 For ALREADY connected users
-  const syncGithub = async () => {
+    // 🔁 ALREADY CONNECTED → sync
     setLoading(true);
     try {
       await fetch(`${API_BASE_URL}/github/sync`, {
@@ -41,7 +42,6 @@ const GithubCard = () => {
 
       {user?.github ? (
         <>
-          {/* Identity */}
           <div>
             <p className="text-sm text-zinc-400">@{user.username}</p>
             <p className="text-zinc-200 font-medium">
@@ -49,30 +49,22 @@ const GithubCard = () => {
             </p>
           </div>
 
-          {/* Stats */}
           <div className="grid grid-cols-2 gap-3 text-center">
             <div className="rounded-lg bg-zinc-800 p-4">
-              <p className="text-xl font-bold text-white">
-                {user.github.publicRepos}
-              </p>
+              <p className="text-xl font-bold">{user.github.publicRepos}</p>
               <p className="text-xs text-zinc-500">Repositories</p>
             </div>
             <div className="rounded-lg bg-zinc-800 p-4">
-              <p className="text-xl font-bold text-white">
-                {user.github.followers}
-              </p>
+              <p className="text-xl font-bold">{user.github.followers}</p>
               <p className="text-xs text-zinc-500">Followers</p>
             </div>
           </div>
 
-          {/* Footer */}
           <div className="flex items-center justify-between pt-2">
-            <p className="text-sm text-zinc-400">
-              Keep your stats fresh
-            </p>
+            <p className="text-sm text-zinc-400">Keep your stats fresh</p>
 
             <button
-              onClick={syncGithub}
+              onClick={connectGithub}
               disabled={loading}
               className="px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-sm"
             >
@@ -82,7 +74,6 @@ const GithubCard = () => {
         </>
       ) : (
         <>
-          {/* Empty state */}
           <p className="text-sm text-zinc-400">
             Connect GitHub to display your repositories and coding activity.
           </p>
