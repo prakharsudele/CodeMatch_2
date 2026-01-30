@@ -5,15 +5,16 @@ export const syncLeetcode = async (req, res) => {
   try {
     const user = await User.findById(req.userId);
 
-    if (!user?.leetcode?.username) {
+    // ✅ username can come from DB (resync) OR body (first connect)
+    const username = user.leetcode?.username || req.body.username;
+
+    if (!username) {
       return res.status(400).json({
-        message: "LeetCode username not connected",
+        message: "LeetCode username required",
       });
     }
 
-    const { username } = user.leetcode;
-
-    // Public LeetCode stats API
+    // 🌐 Fetch public LeetCode stats
     const { data } = await axios.get(
       `https://leetcode-stats-api.herokuapp.com/${username}`
     );
@@ -24,6 +25,7 @@ export const syncLeetcode = async (req, res) => {
       });
     }
 
+    // ✅ Save / update stats
     user.leetcode = {
       username,
       name: data.realName || data.username || "",
@@ -38,43 +40,9 @@ export const syncLeetcode = async (req, res) => {
 
     res.json(user.leetcode);
   } catch (err) {
-    console.error("LeetCode sync error:", err.message);
+    console.error("LeetCode sync error:", err);
     res.status(500).json({
       message: "Failed to sync LeetCode data",
     });
-  }
-};
-
-
-export const connectLeetcode = async (req, res) => {
-  try {
-    const { username } = req.body;
-
-    if (!username) {
-      return res.status(400).json({ message: "Username required" });
-    }
-
-    // fetch LeetCode stats
-    const data = await fetchLeetcodeStats(username);
-
-    const user = await User.findByIdAndUpdate(
-      req.userId,
-      {
-        leetcode: {
-          username,
-          name: data.name,
-          totalSolved: data.totalSolved,
-          easy: data.easy,
-          medium: data.medium,
-          hard: data.hard,
-          lastSynced: new Date(),
-        },
-      },
-      { new: true }
-    );
-
-    res.json(user.leetcode);
-  } catch (err) {
-    res.status(500).json({ message: "LeetCode connect failed" });
   }
 };
