@@ -7,29 +7,23 @@ const GithubCard = () => {
   const [loading, setLoading] = useState(false);
 
   const connectGithub = async () => {
-    // 🧠 FIRST TIME → OAuth redirect
-    if (!user?.github) {
-      window.location.href = `${API_BASE_URL}/auth/github`;
-      return;
-    }
+  setLoading(true);
+  try {
+    await fetch(`${API_BASE_URL}/github/sync`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
 
-    // 🔁 ALREADY CONNECTED → sync
-    setLoading(true);
-    try {
-      const res = await fetch(`${API_BASE_URL}/github/sync`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+    await refetchUser();
+  } catch (err) {
+    console.error("GitHub sync failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
-      if (res.ok) {
-        await refetchUser();
-      }
-    } catch (err) {
-      console.warn("GitHub sync skipped");
-    }
-  };
 
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 space-y-4">

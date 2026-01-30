@@ -7,7 +7,7 @@ export const syncGithub = async (req, res) => {
 
     if (!user.githubToken) {
       return res.status(400).json({
-        message: "GitHub not connected via OAuth",
+        message: "GitHub not connected",
       });
     }
 
@@ -21,15 +21,20 @@ export const syncGithub = async (req, res) => {
     const data = await ghRes.json();
 
     user.github = {
+      username: data.login,
       publicRepos: data.public_repos,
       followers: data.followers,
-      following: data.following,
-      lastSynced: new Date(),
+      avatar: data.avatar_url,
+      profileUrl: data.html_url,
+      lastSyncedAt: new Date(),
     };
 
     await user.save();
+
     res.json(user.github);
   } catch (err) {
+    console.error("GitHub sync error:", err);
     res.status(500).json({ message: "GitHub sync failed" });
   }
 };
+
