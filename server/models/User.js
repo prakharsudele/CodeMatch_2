@@ -8,11 +8,16 @@ const userSchema = new mongoose.Schema(
     email: String,
 
     github: {
+      username: String,
       publicRepos: Number,
       followers: Number,
-      following: Number,
-      commits: Number,
-      lastSynced: Date,
+      avatar: String,
+      profileUrl: String,
+      lastSyncedAt: Date,
+    },
+    githubToken: {
+      type: String,
+      select: false, // 🔐 security
     },
     leetcode: {
       username: String,

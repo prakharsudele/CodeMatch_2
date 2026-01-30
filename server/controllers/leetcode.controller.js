@@ -1,29 +1,46 @@
-import User from "../models/User.js";
 import axios from "axios";
+import User from "../models/User.js";
 
 export const syncLeetcode = async (req, res) => {
   try {
     const user = await User.findById(req.userId);
-    if (!user.leetcode?.username) {
-      return res.status(400).json({ message: "LeetCode not connected" });
+
+    if (!user?.leetcode?.username) {
+      return res.status(400).json({
+        message: "LeetCode username not connected",
+      });
     }
 
+    const { username } = user.leetcode;
+
+    // Public LeetCode stats API
     const { data } = await axios.get(
-      `https://leetcode-stats-api.herokuapp.com/${user.leetcode.username}`
+      `https://leetcode-stats-api.herokuapp.com/${username}`
     );
 
+    if (!data || data.status === "error") {
+      return res.status(404).json({
+        message: "LeetCode user not found",
+      });
+    }
+
     user.leetcode = {
-      ...user.leetcode,
-      totalSolved: data.totalSolved,
-      easy: data.easySolved,
-      medium: data.mediumSolved,
-      hard: data.hardSolved,
+      username,
+      name: data.realName || data.username || "",
+      totalSolved: data.totalSolved ?? 0,
+      easy: data.easySolved ?? 0,
+      medium: data.mediumSolved ?? 0,
+      hard: data.hardSolved ?? 0,
+      lastSynced: new Date(),
     };
 
     await user.save();
-    res.json(user);
+
+    res.json(user.leetcode);
   } catch (err) {
-    console.error("LeetCode sync error", err);
-    res.status(500).json({ message: "LeetCode sync failed" });
+    console.error("LeetCode sync error:", err.message);
+    res.status(500).json({
+      message: "Failed to sync LeetCode data",
+    });
   }
 };

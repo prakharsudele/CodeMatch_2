@@ -16,28 +16,24 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL, // ✅ FIXED
+      callbackURL: process.env.GITHUB_CALLBACK_URL,
     },
     async (accessToken, refreshToken, profile, done) => {
-      try {
-        const user = await User.findOneAndUpdate(
-          { githubId: profile.id },
-          {
-            githubId: profile.id,
-            username: profile.username,
-            avatar: profile.photos?.[0]?.value,
-            email: profile.emails?.[0]?.value,
-          },
-          { upsert: true, new: true }
-        );
+      const user = await User.findOneAndUpdate(
+        { githubId: profile.id },
+        {
+          githubId: profile.id,
+          username: profile.username,
+          avatar: profile.photos?.[0]?.value,
+          githubToken: accessToken, // 🔥 ADD THIS
+        },
+        { upsert: true, new: true }
+      );
 
-        return done(null, user);
-      } catch (err) {
-        console.error("❌ GitHub strategy error:", err);
-        return done(err, null);
-      }
+      return done(null, user);
     }
   )
 );
+
 
 export default passport;

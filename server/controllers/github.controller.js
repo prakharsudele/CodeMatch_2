@@ -3,31 +3,33 @@ import User from "../models/User.js";
 
 export const syncGithub = async (req, res) => {
   try {
-    const user = await User.findById(req.userId);
+    const user = await User.findById(req.userId).select("+githubToken");
 
-    if (!user.github?.username) {
-      return res.status(200).json({ message: "GitHub not connected" });
+    if (!user.githubToken) {
+      return res.status(400).json({
+        message: "GitHub not connected via OAuth",
+      });
     }
 
-    const response = await fetch(
-      `https://api.github.com/users/${user.github.username}`
-    );
+    const ghRes = await fetch("https://api.github.com/user", {
+      headers: {
+        Authorization: `Bearer ${user.githubToken}`,
+        Accept: "application/vnd.github+json",
+      },
+    });
 
-    if (!response.ok) {
-      return res.status(200).json({ message: "GitHub sync skipped" });
-    }
+    const data = await ghRes.json();
 
-    const data = await response.json();
-
-    user.github.publicRepos = data.public_repos;
-    user.github.followers = data.followers;
-    user.github.avatar = data.avatar_url;
+    user.github = {
+      publicRepos: data.public_repos,
+      followers: data.followers,
+      following: data.following,
+      lastSynced: new Date(),
+    };
 
     await user.save();
-
     res.json(user.github);
   } catch (err) {
-    console.error("GitHub sync error:", err);
     res.status(500).json({ message: "GitHub sync failed" });
   }
 };
