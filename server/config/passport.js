@@ -1,3 +1,16 @@
+import passport from "passport";
+import GitHubStrategy from "passport-github2";
+import User from "../models/User.js";
+
+import dotenv from "dotenv";
+dotenv.config();
+
+
+const callbackURL =
+  process.env.NODE_ENV === "production"
+    ? "https://code-match-backend.vercel.app/auth/github/callback"
+    : "http://localhost:5000/auth/github/callback";
+
 passport.use(
   new GitHubStrategy(
     {
@@ -30,3 +43,7 @@ passport.use(
     }
   )
 );
+
+
+
+export default passport;
