@@ -8,38 +8,37 @@ const LeetcodeCard = () => {
   const [loading, setLoading] = useState(false);
 
   const connectLeetcode = async () => {
-  setLoading(true);
+    // 🔐 first-time validation
+    if (!user?.leetcode && !username.trim()) return;
 
-  try {
-    const endpoint = user?.leetcode
-      ? `${API_BASE_URL}/leetcode/sync`
-      : `${API_BASE_URL}/leetcode/connect`;
+    setLoading(true);
 
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    };
+    try {
+      const endpoint = user?.leetcode
+        ? `${API_BASE_URL}/leetcode/sync`
+        : `${API_BASE_URL}/leetcode/connect`;
 
-    // only send username when connecting for first time
-    if (!user?.leetcode) {
-      if (!username) return;
-      options.body = JSON.stringify({ username });
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      };
+
+      if (!user?.leetcode) {
+        options.body = JSON.stringify({ username: username.trim() });
+      }
+
+      await fetch(endpoint, options);
+      await refetchUser();
+      setUsername("");
+    } catch (err) {
+      console.error("LeetCode connect/sync failed", err);
+    } finally {
+      setLoading(false);
     }
-
-    await fetch(endpoint, options);
-
-    await refetchUser();
-    setUsername("");
-  } catch (err) {
-    console.error("LeetCode sync/connect failed", err);
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 space-y-4">
@@ -55,7 +54,9 @@ const LeetcodeCard = () => {
         <>
           {/* Identity */}
           <div>
-            <p className="text-sm text-zinc-400">@{user.leetcode.username}</p>
+            <p className="text-sm text-zinc-400">
+              @{user.leetcode.username}
+            </p>
             {user.leetcode.name && (
               <p className="text-zinc-200 font-medium">
                 {user.leetcode.name}
@@ -107,7 +108,7 @@ const LeetcodeCard = () => {
         <>
           {/* Empty state */}
           <p className="text-sm text-zinc-400">
-            Connect your LeetCode to showcase your DSA strength on your profile.
+            Connect your LeetCode to showcase your DSA strength.
           </p>
 
           <input

@@ -6,7 +6,13 @@ const GithubCard = () => {
   const { user, refetchUser } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  const connectGithub = async () => {
+  // 🔹 For FIRST TIME users (OAuth)
+  const connectGithub = () => {
+    window.location.href = `${API_BASE_URL}/github/auth`;
+  };
+
+  // 🔹 For ALREADY connected users
+  const syncGithub = async () => {
     setLoading(true);
     try {
       await fetch(`${API_BASE_URL}/github/sync`, {
@@ -17,7 +23,7 @@ const GithubCard = () => {
       });
       await refetchUser();
     } catch (err) {
-      console.error("GitHub sync failed");
+      console.error("GitHub sync failed", err);
     } finally {
       setLoading(false);
     }
@@ -66,7 +72,7 @@ const GithubCard = () => {
             </p>
 
             <button
-              onClick={connectGithub}
+              onClick={syncGithub}
               disabled={loading}
               className="px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-sm"
             >
