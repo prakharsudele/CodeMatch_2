@@ -61,7 +61,7 @@ export default function Landing() {
               {!user ? (
                 <button
                   onClick={() => setOpen(true)}
-                  className="px-8 py-3 rounded-full bg-linear-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 transition font-semibold text-lg shadow-lg shadow-purple-500/20"
+                  className="px-8 py-3 rounded-full bg-linear-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 transition font-semibold text-lg shadow-lg shadow-purple-500/20 cursor-pointer"
                 >
                   Sign up with GitHub
                 </button>

@@ -23,12 +23,21 @@ const Footer = () => {
           </a>
 
           <a
-            href="https://www.linkedin.com/in/prakhar-sudele"
+            href="https://www.linkedin.com/in/prakhar-sudele-261780250/"
             target="_blank"
             rel="noreferrer"
             className="hover:text-white transition"
           >
             LinkedIn
+          </a>
+
+          <a
+            href="https://www.instagram.com/prakhar_sudele/"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-white transition"
+          >
+            Instagram
           </a>
 
           <span className="text-zinc-600">•</span>

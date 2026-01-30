@@ -12,7 +12,6 @@ const MyProfileCard = () => {
 
   return (
     <div className="relative w-80 rounded-2xl bg-zinc-900 text-white shadow-xl border border-zinc-800">
-      
       {/* TOP GRADIENT */}
       <div className="relative h-28 bg-linear-to-r from-purple-500 to-cyan-500 rounded-t-2xl">
         <label className="absolute left-1/2 -bottom-10 -translate-x-1/2 cursor-pointer group z-10">
@@ -23,7 +22,7 @@ const MyProfileCard = () => {
           />
 
           <div className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-xs font-semibold transition">
-            Change
+            Change your GitHub profile photo
           </div>
         </label>
       </div>
@@ -34,9 +33,7 @@ const MyProfileCard = () => {
           {user.username || "Developer"}
         </h3>
 
-        <p className="text-sm text-zinc-400">
-          Software Developer
-        </p>
+        <p className="text-sm text-zinc-400">Software Developer</p>
 
         {/* GitHub */}
         {github ? (
@@ -57,9 +54,7 @@ const MyProfileCard = () => {
             </div>
           </div>
         ) : (
-          <p className="mt-4 text-sm text-zinc-500">
-            GitHub not connected
-          </p>
+          <p className="mt-4 text-sm text-zinc-500">GitHub not connected</p>
         )}
 
         {/* LeetCode */}
@@ -69,9 +64,7 @@ const MyProfileCard = () => {
               LeetCode · @{leetcode.username}
             </p>
 
-            <p className="text-xs text-zinc-500">
-              {leetcode.name}
-            </p>
+            <p className="text-xs text-zinc-500">{leetcode.name}</p>
 
             <div className="mt-2 flex justify-between">
               <div>
@@ -89,12 +82,13 @@ const MyProfileCard = () => {
             </div>
           </div>
         ) : (
-          <p className="mt-4 text-sm text-zinc-500">
-            LeetCode not connected
-          </p>
+          <p className="mt-4 text-sm text-zinc-500">LeetCode not connected</p>
         )}
 
-        <button onClick={() => navigate("/profile/me")} className="mt-6 w-full py-2 rounded-lg bg-zinc-800 text-white font-medium cursor-default">
+        <button
+          onClick={() => navigate("/profile/me")}
+          className="mt-6 w-full py-2 rounded-lg bg-zinc-800 text-white font-medium cursor-pointer"
+        >
           Your Profile
         </button>
       </div>
