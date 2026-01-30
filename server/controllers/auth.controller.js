@@ -1,11 +1,17 @@
 import jwt from "jsonwebtoken";
 
 export const githubCallback = (req, res) => {
-  const token = generateToken(req.user._id);
+  if (!req.user) {
+    console.error("❌ GitHub callback: req.user missing");
+    return res.redirect(`${process.env.CLIENT_URL}?error=github_auth_failed`);
+  }
 
-  // ✅ redirect back to frontend with token
-  res.redirect(
-    `${process.env.CLIENT_URL}/auth/success?token=${token}`
+  const token = jwt.sign(
+    { id: req.user._id },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" }
   );
-};
 
+  res.redirect(`${process.env.CLIENT_URL}?token=${token}`);
+};
+  

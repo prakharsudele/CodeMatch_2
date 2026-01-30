@@ -1,15 +1,10 @@
+import dotenv from "dotenv";
+dotenv.config(); // 👈 MUST be first
+
+
 import passport from "passport";
 import GitHubStrategy from "passport-github2";
 import User from "../models/User.js";
-
-import dotenv from "dotenv";
-dotenv.config();
-
-
-const callbackURL =
-  process.env.NODE_ENV === "production"
-    ? "https://code-match-backend.vercel.app/auth/github/callback"
-    : "http://localhost:5000/auth/github/callback";
 
 passport.use(
   new GitHubStrategy(
@@ -26,24 +21,16 @@ passport.use(
             githubId: profile.id,
             username: profile.username,
             avatar: profile.photos?.[0]?.value,
-            githubToken: accessToken, // 🔥 THIS IS THE KEY FIX
-            github: {
-              username: profile.username,
-              profileUrl: profile.profileUrl,
-              avatar: profile.photos?.[0]?.value,
-            },
+            githubToken: accessToken, // 🔥 THIS WAS MISSING
           },
           { upsert: true, new: true }
         );
 
         return done(null, user);
       } catch (err) {
+        console.error("GitHub Strategy Error:", err);
         return done(err, null);
       }
     }
   )
 );
-
-
-
-export default passport;

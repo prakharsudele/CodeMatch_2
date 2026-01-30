@@ -1,4 +1,3 @@
-import axios from "axios";
 import User from "../models/User.js";
 
 export const syncGithub = async (req, res) => {
@@ -7,7 +6,7 @@ export const syncGithub = async (req, res) => {
 
     if (!user.githubToken) {
       return res.status(400).json({
-        message: "GitHub not connected",
+        message: "GitHub not connected via OAuth",
       });
     }
 
@@ -30,11 +29,11 @@ export const syncGithub = async (req, res) => {
     };
 
     await user.save();
-
     res.json(user.github);
   } catch (err) {
     console.error("GitHub sync error:", err);
     res.status(500).json({ message: "GitHub sync failed" });
   }
 };
+
 
