@@ -24,7 +24,7 @@ const SocialLinksEditor = ({ initialLinkedin }) => {
   return (
     <div className="mt-8 space-y-4 max-w-md mx-auto">
       <h3 className="text-lg font-semibold text-white">
-        Social links
+        Social links (Other Platforms Coming Soon)
       </h3>
 
       <input
