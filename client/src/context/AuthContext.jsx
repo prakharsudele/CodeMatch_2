@@ -47,7 +47,11 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("token", tokenFromUrl);
 
     // remove token from URL (important)
-    window.history.replaceState({}, document.title, "/");
+    window.history.replaceState(
+  {},
+  document.title,
+  window.location.pathname
+);
 
     fetchMe();
   } else {

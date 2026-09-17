@@ -1,6 +1,9 @@
 import dotenv from "dotenv";
 dotenv.config(); // 👈 REQUIRED
 
+console.log("CLIENT_URL =", process.env.CLIENT_URL);
+console.log("PORT =", process.env.PORT);
+
 import express from "express";
 import cors from "cors";
 import session from "express-session";
@@ -44,6 +47,14 @@ app.use("/notifications", notificationRoutes);
 app.get("/", (req, res) => {
   res.send("CodeMatch API running");
 });
+
+const PORT = process.env.PORT || 5000;
+
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`CodeMatch API running on port ${PORT}`);
+  });
+}
 
 export default app;
 

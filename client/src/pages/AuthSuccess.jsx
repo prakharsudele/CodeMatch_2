@@ -7,15 +7,6 @@ const AuthSuccess = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  useEffect(() => {
-  const token = new URLSearchParams(window.location.search).get("token");
-
-  if (token) {
-    localStorage.setItem("token", token);
-    navigate("/home", { replace: true });
-  }
-}, []);
-
 
   return (
     <div className="min-h-screen flex items-center justify-center text-zinc-400">
