@@ -18,7 +18,7 @@ const LeetcodeCard = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(
-          user?.leetcode ? {} : { username: username.trim() },
+          user?.leetcode ? {} : { username: username.trim() }
         ),
       });
 
@@ -32,52 +32,86 @@ const LeetcodeCard = () => {
   };
 
   return (
-    <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 space-y-4">
+    <div className="group rounded-[24px] border border-zinc-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-zinc-200/50">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold">LeetCode</h3>
-        <span className="text-xs px-2 py-1 rounded-full bg-orange-500/20 text-orange-400">
-          DSA
-        </span>
+      <div className="flex items-start justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#FFA116] text-xs font-bold text-white">
+            LC
+          </div>
+
+          <div>
+            <h3 className="font-bold text-zinc-950">
+              LeetCode
+            </h3>
+
+            <p className="mt-0.5 text-xs text-zinc-400">
+              Your problem-solving activity
+            </p>
+          </div>
+        </div>
+
+        {user?.leetcode && (
+          <span className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-600">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            Connected
+          </span>
+        )}
       </div>
 
       {user?.leetcode ? (
         <>
           {/* Identity */}
-          <div>
-            <p className="text-sm text-zinc-400">@{user.leetcode.username}</p>
+          <div className="mt-6">
+            <p className="text-sm font-semibold text-zinc-900">
+              @{user.leetcode.username}
+            </p>
+
             {user.leetcode.name && (
-              <p className="text-zinc-200 font-medium">{user.leetcode.name}</p>
+              <p className="mt-1 text-sm text-zinc-400">
+                {user.leetcode.name}
+              </p>
             )}
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-lg bg-zinc-800 p-3">
-              <p className="text-lg font-bold text-green-400">
+          <div className="mt-5 grid grid-cols-3 gap-3">
+            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-center">
+              <p className="text-xl font-bold text-emerald-500">
                 {user.leetcode.easy}
               </p>
-              <p className="text-xs text-zinc-500">Easy</p>
+
+              <p className="mt-1 text-xs text-zinc-400">
+                Easy
+              </p>
             </div>
-            <div className="rounded-lg bg-zinc-800 p-3">
-              <p className="text-lg font-bold text-yellow-400">
+
+            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-center">
+              <p className="text-xl font-bold text-amber-500">
                 {user.leetcode.medium}
               </p>
-              <p className="text-xs text-zinc-500">Medium</p>
+
+              <p className="mt-1 text-xs text-zinc-400">
+                Medium
+              </p>
             </div>
-            <div className="rounded-lg bg-zinc-800 p-3">
-              <p className="text-lg font-bold text-red-400">
+
+            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-center">
+              <p className="text-xl font-bold text-red-500">
                 {user.leetcode.hard}
               </p>
-              <p className="text-xs text-zinc-500">Hard</p>
+
+              <p className="mt-1 text-xs text-zinc-400">
+                Hard
+              </p>
             </div>
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between pt-2">
+          <div className="mt-5 flex items-center justify-between">
             <p className="text-sm text-zinc-400">
-              Total solved:{" "}
-              <span className="text-white font-semibold">
+              Total solved{" "}
+              <span className="font-bold text-zinc-900">
                 {user.leetcode.totalSolved}
               </span>
             </p>
@@ -85,7 +119,7 @@ const LeetcodeCard = () => {
             <button
               onClick={connectLeetcode}
               disabled={loading}
-              className="px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-sm"
+              className="rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? "Syncing..." : "Sync"}
             </button>
@@ -94,24 +128,27 @@ const LeetcodeCard = () => {
       ) : (
         <>
           {/* Empty state */}
-          <p className="text-sm text-zinc-400">
-            Connect your LeetCode to showcase your DSA strength.
-          </p>
+          <div className="mt-6">
+            <p className="text-sm leading-6 text-zinc-500">
+              Connect your LeetCode profile to showcase your
+              problem-solving experience.
+            </p>
 
-          <input
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="LeetCode username"
-            className="w-full px-3 py-2 rounded-lg bg-zinc-800 text-white"
-          />
+            <input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter LeetCode username"
+              className="mt-4 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-red-300 focus:bg-white focus:ring-4 focus:ring-red-50"
+            />
 
-          <button
-            onClick={connectLeetcode}
-            disabled={loading}
-            className="w-full px-4 py-2 rounded-lg bg-orange-600 hover:bg-orange-500 font-medium"
-          >
-            {loading ? "Connecting..." : "Connect LeetCode"}
-          </button>
+            <button
+              onClick={connectLeetcode}
+              disabled={loading}
+              className="mt-3 w-full rounded-xl bg-zinc-950 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {loading ? "Connecting..." : "Connect LeetCode →"}
+            </button>
+          </div>
         </>
       )}
     </div>

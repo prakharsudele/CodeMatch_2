@@ -7,61 +7,98 @@ const GithubCard = () => {
   const [loading, setLoading] = useState(false);
 
   const connectGithub = async () => {
-  setLoading(true);
-  try {
-    await fetch(`${API_BASE_URL}/github/sync`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+    setLoading(true);
 
-    await refetchUser();
-  } catch (err) {
-    console.error("GitHub sync failed");
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      await fetch(`${API_BASE_URL}/github/sync`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
+      await refetchUser();
+    } catch (err) {
+      console.error("GitHub sync failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 space-y-4">
+    <div className="group rounded-[24px] border border-zinc-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-zinc-200/50">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold">GitHub</h3>
-        <span className="text-xs px-2 py-1 rounded-full bg-purple-500/20 text-purple-400">
-          Code
-        </span>
+      <div className="flex items-start justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-zinc-950 text-xs font-bold text-white">
+            GH
+          </div>
+
+          <div>
+            <h3 className="font-bold text-zinc-950">
+              GitHub
+            </h3>
+
+            <p className="mt-0.5 text-xs text-zinc-400">
+              Your open-source activity
+            </p>
+          </div>
+        </div>
+
+        {user?.github && (
+          <span className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-600">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            Connected
+          </span>
+        )}
       </div>
 
       {user?.github ? (
         <>
-          <div>
-            <p className="text-sm text-zinc-400">@{user.username}</p>
-            <p className="text-zinc-200 font-medium">
-              GitHub Profile Connected
+          {/* Identity */}
+          <div className="mt-6">
+            <p className="text-sm font-semibold text-zinc-900">
+              @{user.username}
+            </p>
+
+            <p className="mt-1 text-sm text-zinc-400">
+              GitHub profile connected successfully.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 text-center">
-            <div className="rounded-lg bg-zinc-800 p-4">
-              <p className="text-xl font-bold">{user.github.publicRepos}</p>
-              <p className="text-xs text-zinc-500">Repositories</p>
+          {/* Stats */}
+          <div className="mt-5 grid grid-cols-2 gap-3">
+            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+              <p className="text-2xl font-bold text-zinc-950">
+                {user.github.publicRepos}
+              </p>
+
+              <p className="mt-1 text-xs text-zinc-400">
+                Public repositories
+              </p>
             </div>
-            <div className="rounded-lg bg-zinc-800 p-4">
-              <p className="text-xl font-bold">{user.github.followers}</p>
-              <p className="text-xs text-zinc-500">Followers</p>
+
+            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+              <p className="text-2xl font-bold text-zinc-950">
+                {user.github.followers}
+              </p>
+
+              <p className="mt-1 text-xs text-zinc-400">
+                Followers
+              </p>
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-2">
-            <p className="text-sm text-zinc-400">Keep your stats fresh</p>
+          {/* Footer */}
+          <div className="mt-5 flex items-center justify-between">
+            <p className="text-xs text-zinc-400">
+              Keep your stats updated
+            </p>
 
             <button
               onClick={connectGithub}
               disabled={loading}
-              className="px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-sm"
+              className="rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? "Syncing..." : "Sync"}
             </button>
@@ -69,15 +106,20 @@ const GithubCard = () => {
         </>
       ) : (
         <>
-          <p className="text-sm text-zinc-400">
-            Connect GitHub to display your repositories and coding activity.
-          </p>
+          {/* Empty state */}
+          <div className="mt-6 rounded-2xl border border-dashed border-zinc-200 bg-zinc-50 p-5">
+            <p className="text-sm leading-6 text-zinc-500">
+              Connect GitHub to showcase your repositories and
+              coding activity to other developers.
+            </p>
+          </div>
 
           <button
             onClick={connectGithub}
-            className="w-full px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 font-medium"
+            disabled={loading}
+            className="mt-4 w-full rounded-xl bg-zinc-950 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Connect GitHub
+            {loading ? "Connecting..." : "Connect GitHub →"}
           </button>
         </>
       )}
