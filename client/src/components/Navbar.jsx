@@ -1,11 +1,11 @@
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import AuthModal from "./AuthModal";
 import NotificationsDropdown from "./NotificationsDropdown";
 import { fetchNotifications } from "../api/notifications";
 
-const Navbar = () => {
+const Navbar = ({ variant = "dark" }) => {
   const { user, logout } = useAuth();
   const [openAuth, setOpenAuth] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
@@ -15,11 +15,16 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const isLight = variant === "light";
 
   const isActive = (path) =>
     location.pathname === path
-      ? "text-white"
-      : "text-zinc-400 hover:text-white";
+      ? isLight
+        ? "text-zinc-950"
+        : "text-white"
+      : isLight
+        ? "text-zinc-500 hover:text-zinc-950"
+        : "text-zinc-400 hover:text-white";
 
   useEffect(() => {
     if (!user) return;
@@ -32,12 +37,20 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="w-full border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-40">
+      <nav
+        className={`sticky top-0 z-40 w-full border-b backdrop-blur ${
+          isLight
+            ? "border-zinc-200/80 bg-white/90"
+            : "border-zinc-800 bg-zinc-950/80"
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           {/* Logo */}
           <Link
             to="/"
-            className="text-2xl font-bold bg-linear-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent"
+            className={`text-2xl font-bold tracking-tight ${
+              isLight ? "text-red-500" : "text-white"
+            }`}
           >
             CodeMatch
           </Link>
@@ -47,13 +60,21 @@ const Navbar = () => {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setOpenAuth(true)}
-                className="px-5 py-2 rounded-full border border-zinc-700 text-zinc-300 hover:text-white transition"
+                className={`rounded-xl border px-5 py-2 text-sm font-medium transition ${
+                  isLight
+                    ? "border-zinc-200 text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-950"
+                    : "border-zinc-700 text-zinc-300 hover:text-white"
+                }`}
               >
                 Login
               </button>
               <button
                 onClick={() => setOpenAuth(true)}
-                className="px-5 py-2 rounded-full bg-linear-to-r from-purple-500 to-cyan-500 text-white font-semibold hover:opacity-90 transition"
+                className={`rounded-xl px-5 py-2 text-sm font-semibold text-white transition ${
+                  isLight
+                    ? "bg-red-500 shadow-sm shadow-red-500/20 hover:bg-red-600"
+                    : "bg-purple-600 hover:bg-purple-500"
+                }`}
               >
                 Sign up
               </button>
