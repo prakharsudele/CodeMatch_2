@@ -4,7 +4,7 @@ import { notifyUser } from "../utils/notify.js";
 export const getMatchRequests = async (req, res) => {
   const user = await User.findById(req.userId).populate(
     "matchRequests.from",
-    "username avatar github leetcode",
+    "username avatar github leetcode bio",
   );
 
   const pending = user.matchRequests.filter(
@@ -58,8 +58,52 @@ export const respondToMatchRequest = async (req, res) => {
 export const getMatches = async (req, res) => {
   const user = await User.findById(req.userId).populate(
     "matches",
-    "username avatar github leetcode linkedin",
+    "username avatar github leetcode linkedin bio",
   );
 
   res.json(user.matches);
+};
+
+export const removeConnection = async (req, res) => {
+  try {
+    const currentUserId = req.userId;
+    const otherUserId = req.params.userId;
+
+    if (currentUserId === otherUserId) {
+      return res.status(400).json({
+        message: "You cannot remove yourself",
+      });
+    }
+
+    const user = await User.findById(currentUserId);
+    const otherUser = await User.findById(otherUserId);
+
+    if (!user || !otherUser) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    // Remove each user from the other's matches
+    user.matches = user.matches.filter(
+      (id) => id.toString() !== otherUserId
+    );
+
+    otherUser.matches = otherUser.matches.filter(
+      (id) => id.toString() !== currentUserId
+    );
+
+    await user.save();
+    await otherUser.save();
+
+    res.json({
+      message: "Connection removed successfully",
+    });
+  } catch (err) {
+    console.error("removeConnection error:", err);
+
+    res.status(500).json({
+      message: "Failed to remove connection",
+    });
+  }
 };

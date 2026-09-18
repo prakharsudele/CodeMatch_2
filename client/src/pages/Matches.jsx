@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-
 import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
 import { API_BASE_URL } from "../api";
@@ -11,6 +10,8 @@ const Matches = () => {
   const navigate = useNavigate();
 
   const [matches, setMatches] = useState([]);
+  const [removingId, setRemovingId] = useState(null);
+  const [confirmMatch, setConfirmMatch] = useState(null);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/matches`, {
@@ -22,6 +23,41 @@ const Matches = () => {
       .then((data) => setMatches(data || []))
       .catch(console.error);
   }, []);
+
+  const handleRemoveConnection = async () => {
+    if (!confirmMatch) return;
+
+    const userId = confirmMatch._id;
+
+    setRemovingId(userId);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/matches/${userId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to remove connection");
+      }
+
+      // Remove from UI immediately
+      setMatches((prev) =>
+        prev.filter((match) => match?._id !== userId)
+      );
+
+      setConfirmMatch(null);
+    } catch (err) {
+      console.error("Remove connection failed:", err);
+      alert(err.message || "Failed to remove connection");
+    } finally {
+      setRemovingId(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -39,7 +75,9 @@ const Matches = () => {
 
   if (!user) return <Navigate to="/" replace />;
 
-  const validMatches = matches.filter((match) => match && match._id);
+  const validMatches = matches.filter(
+    (match) => match && match._id
+  );
 
   return (
     <div className="min-h-screen bg-[#fafafa] text-zinc-950">
@@ -49,13 +87,13 @@ const Matches = () => {
         {/* =====================================================
             HEADER
         ====================================================== */}
+
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
           className="relative overflow-hidden rounded-[28px] border border-zinc-200 bg-white px-6 py-8 shadow-sm sm:px-8"
         >
-          {/* Decorative background */}
           <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-red-50 blur-3xl" />
 
           <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
@@ -102,6 +140,7 @@ const Matches = () => {
         {/* =====================================================
             MATCHES
         ====================================================== */}
+
         {validMatches.length === 0 ? (
           <motion.section
             initial={{ opacity: 0, y: 12 }}
@@ -123,11 +162,13 @@ const Matches = () => {
                     strokeLinejoin="round"
                     d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"
                   />
+
                   <circle
                     cx="9"
                     cy="7"
                     r="4"
                   />
+
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -177,10 +218,7 @@ const Matches = () => {
                     duration: 0.35,
                     delay: index * 0.05,
                   }}
-                  onClick={() =>
-                    navigate(`/profile/${match._id}`)
-                  }
-                  className="group cursor-pointer rounded-[24px] border border-zinc-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/60"
+                  className="group rounded-[24px] border border-zinc-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-zinc-300 hover:shadow-xl hover:shadow-zinc-200/60"
                 >
                   {/* Top */}
                   <div className="flex items-center justify-between">
@@ -188,13 +226,23 @@ const Matches = () => {
                       Connected
                     </span>
 
-                    <span className="text-xs text-zinc-300 transition group-hover:text-red-400">
-                      →
-                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmMatch(match)}
+                      className="rounded-lg px-2 py-1 text-xs font-medium text-zinc-400 transition hover:bg-red-50 hover:text-red-500"
+                    >
+                      Remove
+                    </button>
                   </div>
 
                   {/* Avatar + identity */}
-                  <div className="mt-7 flex flex-col items-center text-center">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      navigate(`/profile/${match._id}`)
+                    }
+                    className="mt-7 flex w-full flex-col items-center text-center"
+                  >
                     <div className="rounded-[22px] border-4 border-zinc-50 bg-zinc-50 p-0.5 transition group-hover:border-red-50">
                       <img
                         src={
@@ -210,16 +258,28 @@ const Matches = () => {
                       @{match.username || "Unknown User"}
                     </h3>
 
-                    <p className="mt-1 text-xs text-zinc-400">
-                      CodeMatch connection
-                    </p>
-                  </div>
+                    {match.bio ? (
+                      <p className="mt-2 line-clamp-2 max-w-[260px] text-xs leading-5 text-zinc-500">
+                        {match.bio}
+                      </p>
+                    ) : (
+                      <p className="mt-1 text-xs text-zinc-400">
+                        CodeMatch connection
+                      </p>
+                    )}
+                  </button>
 
                   {/* Divider */}
                   <div className="my-5 h-px bg-zinc-100" />
 
-                  {/* Action */}
-                  <div className="flex items-center justify-between">
+                  {/* View profile */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      navigate(`/profile/${match._id}`)
+                    }
+                    className="flex w-full items-center justify-between"
+                  >
                     <span className="text-xs text-zinc-400">
                       Matched developer
                     </span>
@@ -227,7 +287,7 @@ const Matches = () => {
                     <span className="text-sm font-semibold text-zinc-700 transition group-hover:text-red-500">
                       View Profile →
                     </span>
-                  </div>
+                  </button>
                 </motion.div>
               ))}
             </div>
@@ -236,6 +296,70 @@ const Matches = () => {
 
         <div className="h-10" />
       </main>
+
+      {/* =====================================================
+          REMOVE CONNECTION CONFIRMATION
+      ====================================================== */}
+
+      {confirmMatch && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/40 px-5 backdrop-blur-sm">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96, y: 8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="w-full max-w-sm rounded-[24px] border border-zinc-200 bg-white p-6 shadow-2xl"
+          >
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-red-50">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                className="h-5 w-5 text-red-500"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M18 6L6 18M6 6l12 12"
+                />
+              </svg>
+            </div>
+
+            <h2 className="mt-5 text-lg font-bold text-zinc-950">
+              Remove connection?
+            </h2>
+
+            <p className="mt-2 text-sm leading-6 text-zinc-500">
+              You and{" "}
+              <span className="font-semibold text-zinc-700">
+                @{confirmMatch.username}
+              </span>{" "}
+              will no longer appear in each other's connections.
+            </p>
+
+            <div className="mt-6 flex gap-3">
+              <button
+                type="button"
+                onClick={() => setConfirmMatch(null)}
+                disabled={removingId === confirmMatch._id}
+                className="flex-1 rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={handleRemoveConnection}
+                disabled={removingId === confirmMatch._id}
+                className="flex-1 rounded-xl bg-red-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {removingId === confirmMatch._id
+                  ? "Removing..."
+                  : "Remove"}
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };
