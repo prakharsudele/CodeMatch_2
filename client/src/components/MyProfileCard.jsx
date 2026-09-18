@@ -11,149 +11,115 @@ const MyProfileCard = () => {
   const leetcode = user.leetcode;
 
   return (
-    <div className="relative w-full max-w-sm overflow-hidden rounded-[24px] border border-zinc-200 bg-white text-zinc-950 shadow-sm transition-shadow hover:shadow-lg hover:shadow-zinc-200/60">
+    <div className="relative w-full max-w-sm overflow-hidden rounded-[28px] border border-zinc-200 bg-white text-zinc-950 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-zinc-200/50">
       {/* Header */}
-      <div className="relative h-28 overflow-visible bg-zinc-950">
-        <div className="absolute -right-12 -top-20 h-48 w-48 rounded-full bg-red-500/20 blur-3xl" />
+      <div className="relative h-32 overflow-visible bg-zinc-950">
+        {/* Red glow */}
+        <div className="pointer-events-none absolute -right-12 -top-16 h-48 w-48 rounded-full bg-red-500/20 blur-3xl" />
 
+        {/* Dot pattern */}
         <div
-          className="absolute inset-0 opacity-20"
+          className="pointer-events-none absolute inset-0 opacity-20"
           style={{
             backgroundImage: "radial-gradient(#ffffff 1px, transparent 1px)",
             backgroundSize: "12px 12px",
           }}
         />
 
-        <div className="absolute bottom-4 left-5">
-          <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-[11px] font-medium text-white backdrop-blur-md">
-            Developer Profile
+        <div className="absolute left-5 top-5">
+          <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-white backdrop-blur-md">
+            My Profile
           </span>
         </div>
 
         {/* Avatar */}
-        <label className="absolute -bottom-10 right-6 z-20 cursor-pointer">
-          <div className="group relative rounded-[18px] border-4 border-white bg-white shadow-lg">
+        <div className="absolute -bottom-11 right-6 z-20">
+          <div className="group relative rounded-[20px] border-4 border-white bg-white shadow-xl">
             <img
               src={user.avatar || "https://i.pravatar.cc/150"}
               alt="avatar"
-              className="h-20 w-20 rounded-[14px] object-cover"
+              className="h-22 w-22 rounded-[16px] object-cover"
             />
-
-            <div className="absolute inset-1 flex items-center justify-center rounded-[12px] bg-black/60 px-2 text-center text-[10px] font-semibold text-white opacity-0 transition group-hover:opacity-100">
-              Change photo
-            </div>
           </div>
-        </label>
+        </div>
       </div>
 
       {/* Content */}
-      <div className="px-6 pb-6 pt-14">
+      <div className="px-6 pb-6 pt-16">
+        {/* Identity */}
         <div>
-          <h3 className="text-xl font-bold tracking-tight">
-            {user.username || "Developer"}
+          <h3 className="text-xl font-bold tracking-tight text-zinc-950">
+            @{user.username || "Developer"}
           </h3>
 
-          <p className="mt-1 text-sm font-medium text-red-500">
-            Software Developer
-          </p>
+          <div>
+            <h3 className="text-xl font-bold tracking-tight text-zinc-950">
+              @{user.username || "Developer"}
+            </h3>
+
+            {user.bio ? (
+              <p className="mt-2 text-sm leading-6 text-zinc-500">{user.bio}</p>
+            ) : (
+              <p className="mt-2 text-sm text-zinc-400">
+                Add a short bio to tell developers what you're interested in.
+              </p>
+            )}
+          </div>
         </div>
 
-        {/* GitHub */}
-        <div className="mt-6 rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
-          {github ? (
-            <>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-semibold text-zinc-900">GitHub</p>
-                  <p className="mt-0.5 text-xs text-zinc-400">
-                    @{user.username}
-                  </p>
-                </div>
+        {/* Activity summary */}
+        <div className="mt-6 grid grid-cols-2 gap-3">
+          <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+            <div className="flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-950 text-[8px] font-bold text-white">
+                GH
+              </span>
 
-                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-950 text-[9px] font-bold text-white">
-                  GH
-                </span>
-              </div>
+              <span className="text-xs font-semibold text-zinc-600">
+                GitHub
+              </span>
+            </div>
 
-              <div className="mt-4 grid grid-cols-2 divide-x divide-zinc-200">
-                <div className="text-center">
-                  <p className="text-lg font-bold text-zinc-950">
-                    {github.publicRepos}
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-zinc-400">
-                    Repositories
-                  </p>
-                </div>
+            <p className="mt-4 text-xl font-bold text-zinc-950">
+              {github?.publicRepos ?? "-"}
+            </p>
 
-                <div className="text-center">
-                  <p className="text-lg font-bold text-zinc-950">
-                    {github.followers}
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-zinc-400">Followers</p>
-                </div>
-              </div>
-            </>
-          ) : (
-            <p className="text-sm text-zinc-400">GitHub not connected</p>
-          )}
+            <p className="mt-0.5 text-[11px] text-zinc-400">Repositories</p>
+          </div>
+
+          <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+            <div className="flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#FFA116] text-[8px] font-bold text-white">
+                LC
+              </span>
+
+              <span className="text-xs font-semibold text-zinc-600">
+                LeetCode
+              </span>
+            </div>
+
+            <p className="mt-4 text-xl font-bold text-zinc-950">
+              {leetcode?.totalSolved ?? "-"}
+            </p>
+
+            <p className="mt-0.5 text-[11px] text-zinc-400">Problems solved</p>
+          </div>
         </div>
 
-        {/* LeetCode */}
-        <div className="mt-3 rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
-          {leetcode ? (
-            <>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-semibold text-zinc-900">
-                    LeetCode
-                  </p>
+        {/* Connection status */}
+        <div className="mt-4 flex items-center justify-between rounded-2xl border border-zinc-200 bg-white px-4 py-3">
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-emerald-500" />
 
-                  <p className="mt-0.5 text-xs text-zinc-400">
-                    @{leetcode.username}
-                  </p>
-                </div>
+            <span className="text-xs font-medium text-zinc-500">
+              Profile active
+            </span>
+          </div>
 
-                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#FFA116] text-[10px] font-bold text-white">
-                  LC
-                </span>
-              </div>
-
-              <div className="mt-4 grid grid-cols-3 divide-x divide-zinc-200 text-center">
-                <div>
-                  <p className="text-lg font-bold text-emerald-500">
-                    {leetcode.easy}
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-zinc-400">Easy</p>
-                </div>
-
-                <div>
-                  <p className="text-lg font-bold text-amber-500">
-                    {leetcode.medium}
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-zinc-400">Medium</p>
-                </div>
-
-                <div>
-                  <p className="text-lg font-bold text-red-500">
-                    {leetcode.hard}
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-zinc-400">Hard</p>
-                </div>
-              </div>
-
-              <div className="mt-4 border-t border-zinc-200 pt-3 text-center">
-                <span className="text-xs text-zinc-400">Total solved </span>
-                <span className="text-sm font-bold text-zinc-900">
-                  {leetcode.totalSolved}
-                </span>
-              </div>
-            </>
-          ) : (
-            <p className="text-sm text-zinc-400">LeetCode not connected</p>
-          )}
+          <span className="text-[11px] text-zinc-400">Public preview</span>
         </div>
 
-        {/* Profile button */}
+        {/* Button */}
         <button
           onClick={() => navigate("/profile/me")}
           className="mt-5 w-full rounded-xl bg-zinc-950 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800"

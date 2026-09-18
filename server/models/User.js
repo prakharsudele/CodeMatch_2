@@ -32,6 +32,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    bio: {
+      type: String,
+      default: "",
+      maxlength: 200,
+    },
     swipes: {
       liked: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
       passed: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],

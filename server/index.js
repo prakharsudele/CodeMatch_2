@@ -39,6 +39,12 @@ app.use(passport.initialize());
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/github", githubRoutes);
+
+app.use((req, res, next) => {
+  console.log("➡️ REQUEST:", req.method, req.originalUrl);
+  next();
+});
+
 app.use("/leetcode", leetcodeRoutes);
 app.use("/swipe", swipeRoutes);
 app.use("/matches", matchRoutes);

@@ -1,12 +1,20 @@
-import axios from "axios";
 import User from "../models/User.js";
+import { getLeetcodeStats } from "../services/leetcode.service.js";
 
 export const syncLeetcode = async (req, res) => {
   try {
     const user = await User.findById(req.userId);
 
-    // ✅ username can come from DB (resync) OR body (first connect)
-    const username = user.leetcode?.username || req.body.username;
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    // Username comes from DB for resync,
+    // or request body for first-time connection.
+    const username =
+      user.leetcode?.username || req.body.username?.trim();
 
     if (!username) {
       return res.status(400).json({
@@ -14,25 +22,16 @@ export const syncLeetcode = async (req, res) => {
       });
     }
 
-    // 🌐 Fetch public LeetCode stats
-    const { data } = await axios.get(
-      `https://leetcode-stats-api.herokuapp.com/${username}`
-    );
+    const stats = await getLeetcodeStats(username);
 
-    if (!data || data.status === "error") {
+    if (!stats) {
       return res.status(404).json({
         message: "LeetCode user not found",
       });
     }
 
-    // ✅ Save / update stats
     user.leetcode = {
-      username,
-      name: data.realName || data.username || "",
-      totalSolved: data.totalSolved ?? 0,
-      easy: data.easySolved ?? 0,
-      medium: data.mediumSolved ?? 0,
-      hard: data.hardSolved ?? 0,
+      ...stats,
       lastSynced: new Date(),
     };
 
@@ -40,7 +39,12 @@ export const syncLeetcode = async (req, res) => {
 
     res.json(user.leetcode);
   } catch (err) {
-    console.error("LeetCode sync error:", err);
+    console.error("❌ LeetCode sync error:", err.message);
+
+    if (err.response) {
+      console.error("LeetCode response:", err.response.data);
+    }
+
     res.status(500).json({
       message: "Failed to sync LeetCode data",
     });

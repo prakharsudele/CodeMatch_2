@@ -18,7 +18,7 @@ export const getMe = async (req, res) => {
 export const getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select(
-      "username avatar github leetcode linkedin"
+      "username avatar github leetcode linkedin bio"
     );
 
     if (!user) {
@@ -34,11 +34,11 @@ export const getUserProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { linkedin } = req.body;
+    const { linkedin , bio } = req.body;
 
     const user = await User.findByIdAndUpdate(
       req.userId,
-      { linkedin },
+      { linkedin , bio , },
       { new: true }
     );
 

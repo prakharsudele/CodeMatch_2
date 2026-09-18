@@ -142,16 +142,16 @@ const Navbar = ({ variant = "dark" }) => {
                     alt="avatar"
                     className="w-9 h-9 rounded-full border border-zinc-700"
                   />
-                  <span className="text-zinc-300 text-sm font-medium hidden sm:block">
+                  <span className=" text-zinc-700 hover:text-zinc-950 text-sm font-medium hidden sm:block">
                     @{user.username}
                   </span>
                 </button>
 
                 {openMenu && (
-                  <div className="absolute right-0 mt-2 w-40 rounded-xl bg-zinc-900 border border-zinc-800 shadow-xl overflow-hidden">
+                  <div className="absolute right-0 mt-2 w-48 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-xl shadow-zinc-200/50 z-50">
                     <button
                       onClick={() => navigate("/profile/me")}
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-zinc-800"
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-zinc-200"
                     >
                       My Profile
                     </button>

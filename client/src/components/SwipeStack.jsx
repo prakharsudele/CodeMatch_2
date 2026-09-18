@@ -1,22 +1,29 @@
 import UserCard from "./UserCard";
 
-
 const SwipeStack = ({ users, onSwipe }) => {
-  const safeUsers = users?.filter(u => u && u._id) || [];
+  const safeUsers = users?.filter((u) => u && u._id) || [];
 
   if (safeUsers.length === 0) {
     return (
-      <div className="text-zinc-400 text-center">
-        <p className="text-lg font-medium">No more developers 😕</p>
-        <p className="text-sm mt-2">
-          Check back later for new matches
+      <div className="flex w-full max-w-sm flex-col items-center justify-center text-center">
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-zinc-200 bg-zinc-50">
+          <span className="text-xl text-zinc-300">⌁</span>
+        </div>
+
+        <p className="mt-5 text-lg font-semibold text-zinc-900">
+          No more developers
+        </p>
+
+        <p className="mt-2 max-w-xs text-sm leading-6 text-zinc-400">
+          You've reached the end of your current discovery list. Check back
+          later for new developers.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="relative w-full max-w-sm h-125 flex items-center justify-center">
+    <div className="relative flex h-[520px] w-full max-w-sm items-center justify-center">
       {safeUsers
         .slice(0, 3)
         .map((user, index) => {
@@ -28,7 +35,9 @@ const SwipeStack = ({ users, onSwipe }) => {
               className="absolute"
               style={{
                 zIndex: 10 - index,
-                transform: `scale(${1 - index * 0.05}) translateY(${index * 12}px)`,
+                transform: `scale(${1 - index * 0.05}) translateY(${
+                  index * 12
+                }px)`,
               }}
             >
               <UserCard
